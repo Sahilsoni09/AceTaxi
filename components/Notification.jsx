@@ -23,16 +23,18 @@ const Notification = () => {
   const [notification, setNotification] = useState(false);
 
   const { setBookingDetails } = useContext(BookingDetailContext);
-  const { setExpoToken, setModalVisible } = useContext(notificationContext);
+  const { expoToken, setExpoToken, setModalVisible } =
+    useContext(notificationContext);
 
   useEffect(() => {
     registerForPushNotificationsAsync()
       .then((token) => {
-        console.log("token", token);
         setExpoToken(token);
+        console.log("token", expoToken );
       })
       .catch((err) => console.log(err));
 
+    
     // Check for a notification response when the app is launched or resumed
     const checkInitialNotification = async () => {
       const response = await Notifications.getLastNotificationResponseAsync();
@@ -47,6 +49,7 @@ const Notification = () => {
           response.notification.request.content.data.bookinginfo;
 
         if (pickupAddress === undefined || destinationAddress === undefined) {
+          
           setModalVisible(false);
         } else {
           console.log("modal is set to visible");
@@ -95,6 +98,10 @@ const Notification = () => {
     };
   }, []);
 
+  useEffect(()=>{
+    submitDriverId();
+  },[expoToken])
+
   async function registerForPushNotificationsAsync() {
     let token;
 
@@ -119,7 +126,7 @@ const Notification = () => {
         alert("Failed to get push token for push notification!");
         return;
       }
- 
+
       try {
         const projectId =
           Constants?.expoConfig?.extra?.eas?.projectId ??
@@ -139,6 +146,29 @@ const Notification = () => {
     return token;
   }
 
+  // send driver id & Expo push Token to Backend
+
+  function submitDriverId() {
+    fetch("https://mobile-notifiation-registraion.onrender.com", {
+      // Replace with your actual backend URL
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token: expoToken, userId:8 }), // Send driverId & expoPushToken to the backend
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(
+          "expoToken & driver  ID sent to backend successfully:",
+          data
+        );
+      })
+      .catch((error) => {
+        console.error("Error sending Driver ID to backend:", error);
+        alert("Failed to send Driver ID. Please try again.");
+      });
+  }
   return <></>;
 };
 

@@ -56,7 +56,8 @@ const BookingHistoryScreen = ({ navigation }) => {
             item.pickup,
             item.pickupPostCode,
             item.destination,
-            item.destinationPostCode
+            item.destinationPostCode,
+            item.vias
           )
         } // Define the openMap function to handle navigation to map screen
       >
@@ -69,14 +70,15 @@ const BookingHistoryScreen = ({ navigation }) => {
     pickup,
     pickupPostCode,
     destination,
-    destinationPostCode
+    destinationPostCode,
+    vias =[],
   ) => {
     navigation.navigate("Map", {
       pickup: pickup,
       pickupPostCode: pickupPostCode,
       destination: destination,
       destinationPostCode: destinationPostCode,
-      vias: [], // Add vias if needed
+      vias, // Add vias if needed
 
       timestamp: Date.now()
     });

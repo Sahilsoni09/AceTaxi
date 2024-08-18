@@ -11,24 +11,25 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const Map = () => {
-
   const route = useRoute();
-  console.log("route: ", route); 
+  console.log("route: ", route);
   const {
     pickup,
     pickupPostCode,
     destination,
     destinationPostCode,
-    vias = [],
+    vias,
     timestamp,
   } = route.params; // vias is an array of intermediate stops
+
+  console.log("vias: ", vias);
 
   // State to manage the region displayed on the map
   const [region, setRegion] = useState({
     latitude: 51.5074, // Default location (e.g., London)
     longitude: -0.1278,
     latitudeDelta: LATITUDE_DELTA,
-    longitudeDelta:LONGITUDE_DELTA,
+    longitudeDelta: LONGITUDE_DELTA,
   });
 
   const [pickupCoords, setPickupCoords] = useState(null);
@@ -36,7 +37,6 @@ const Map = () => {
   const [viasCoords, setViasCoords] = useState([]);
 
   useEffect(() => {
-
     // Function to geocode an address and postal code into coordinates
     const geocodeAddress = async (address, postCode) => {
       const fullAddress = `${address},${postCode}`;
@@ -65,9 +65,17 @@ const Map = () => {
     // Function to fetch coordinates for pickup, destination, and vias
     const fetchCoordinates = async () => {
       const pickupCoords = await geocodeAddress(pickup, pickupPostCode);
-      const destinationCoords = await geocodeAddress(destination,destinationPostCode);
-      const viasCoordsPromises = vias.map((via) => geocodeAddress(via));
-      const viasCoords = await Promise.all(viasCoordsPromises);
+      const destinationCoords = await geocodeAddress(
+        destination,
+        destinationPostCode
+      );
+      
+        const viasCoordsPromises = vias?.map((via) =>
+          geocodeAddress(via?.address, via?.postCode)
+        );
+        const viasCoords = await Promise.all(viasCoordsPromises);
+        console.log("viasCoord", viasCoords);
+     
 
       if (pickupCoords && destinationCoords) {
         setPickupCoords(pickupCoords);
@@ -94,36 +102,47 @@ const Map = () => {
     };
 
     fetchCoordinates();
-  }, [pickup, destination, vias,timestamp]);
+  }, [pickup, destination, vias, timestamp]);
 
   return (
     <View style={styles.container}>
       {pickupCoords && destinationCoords ? (
         <MapView
-          style={styles.map}  
-          region={region}  
+          style={styles.map}
+          region={region}
           initialRegion={region}
           showsUserLocation={true}
           loadingEnabled={true}
         >
           <Marker coordinate={pickupCoords} title="Pickup Location" />
-          {viasCoords.map((viaCoord, index) => (
-            <Marker key={`via-${index}`} coordinate={viaCoord} title={`Via ${index + 1}`} />
-          ))}
+
+          
+          
+            {viasCoords.length > 0 &&
+              viasCoords?.map((viaCoord, index) => (
+                <Marker
+                  key={`via-${index}`}
+                  coordinate={viaCoord}
+                  title={`Via ${index + 1}`}
+                />
+              ))}
+          
+          
+
           <Marker coordinate={destinationCoords} title="Destination Location" />
 
           <MapViewDirections
             origin={pickupCoords}
             destination={destinationCoords}
             waypoints={viasCoords}
-            apikey={"AIzaSyD4pR99wUBL7JtFDAibNJnVAwBddoRLwZw"} 
+            apikey={"AIzaSyD4pR99wUBL7JtFDAibNJnVAwBddoRLwZw"}
             strokeWidth={3}
             strokeColor="#CD1A21"
           />
         </MapView>
       ) : (
-        <View style={styles.loadingContainer}>  
-          <Text style={styles.loadingText}>Loading map...</Text>  
+        <View style={styles.loadingContainer}>
+          <Text style={styles.loadingText}>Loading map...</Text>
         </View>
       )}
     </View>
@@ -138,16 +157,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   map: {
-    width: "100%",  
-    height: "100%",  
+    width: "100%",
+    height: "100%",
   },
   loadingContainer: {
-    flex: 1,  
-    justifyContent: "center",  
-    alignItems: "center",  
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   loadingText: {
-    fontSize: 18,  
-    fontWeight: "bold",  
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "30212850639",
+    "project_id": "acetaxi-22e34",
+    "storage_bucket": "acetaxi-22e34.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:30212850639:android:b2cdb1c6ad74d3d9d248ba",
+        "android_client_info": {
+          "package_name": "com.ace.acetaxi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHxJhMkc5CwKX7H75cgVIIAdZ22yEW_JQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

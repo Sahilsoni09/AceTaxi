@@ -1,13 +1,13 @@
 import * as SQLite from "expo-sqlite/legacy";
 
-const database = SQLite.openDatabase("bookings.db");
+const database = SQLite.openDatabase("JobsDetails.db");
 
 export function init() {
   // Setup the base structure with the table creation
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `CREATE TABLE IF NOT EXISTS bookings (
+        `CREATE TABLE IF NOT EXISTS JobsDetails (
           bookingId INTEGER PRIMARY KEY NOT NULL,
           passenger TEXT NOT NULL,
           pickup TEXT NOT NULL,
@@ -41,15 +41,15 @@ export function insertJobRequestHistory(
   pickupPostCode,
   destinationAddress,
   destinationPostCode,
-  vias =[],
+  vias,
   price,
   response
 ) {
+  console.log("viaFullAddress before insert:", vias);
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
-      console.log(tx);
       tx.executeSql(
-        `INSERT INTO bookings (bookingId, passenger, pickup, pickupPostCode, destination, destinationPostCode, vias, price, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO JobsDetails (bookingId, passenger, pickup, pickupPostCode, destination, destinationPostCode, vias, price, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           bookingId,
           passengerName,
@@ -80,15 +80,36 @@ export function fetchJobRequestHistory() {
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        "SELECT * FROM bookings",
-        [], // No parameters for this query
+        `SELECT * FROM JobsDetails`,
+        [],
         (_, result) => {
-          console.log("Fetch success");
-          resolve(result.rows._array); // Fetch the result rows
+          const bookings = result.rows._array;
+
+          // Handle parsing for 'vias' with default value
+          const bookingsWithParsedVias = bookings.map((booking) => {
+            console.log("viaFullAddress in DB:", booking.vias);
+            try {
+              return {
+                ...booking,
+                vias: booking.vias
+                  ? JSON.parse(booking.vias)
+                  : [], // Default to empty array if 'vias' is null or empty
+              };
+            } catch (error) {
+              console.error("Error parsing 'viaFullAddress':", error);
+              return {
+                ...booking,
+                vias: [], // Default to empty array if JSON.parse fails
+              };
+            }
+          });
+
+          console.log("Fetch successful");
+          resolve(bookingsWithParsedVias);
         },
         (_, error) => {
-          console.log("Fetch error: ", error);
-          reject(error); // Reject if there's an error
+          console.error("Fetch error:", error);
+          reject(error);
         }
       );
     });

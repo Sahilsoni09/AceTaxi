@@ -4,7 +4,9 @@ import notificationContext from "./NotificationContext";
 const NotifcationContextProvider = ({ children }) => {
   const [jobDetails, setJobDetails] = useState({ from: "", to: "" });
   const [modalVisible, setModalVisible] = useState(false);
-  const [expotoken, setExpoToken] = useState("");
+  const [expoToken, setExpoToken] = useState("");
+
+  
 
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
@@ -12,6 +14,7 @@ const NotifcationContextProvider = ({ children }) => {
   return (
     <notificationContext.Provider
       value={{
+        expoToken,
         setExpoToken,
         jobDetails,
         setJobDetails,

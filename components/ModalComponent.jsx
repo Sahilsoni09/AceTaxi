@@ -53,6 +53,7 @@ const ModalComponent = () => {
       pickupPostCode,
       destinationAddress,
       destinationPostCode,
+      vias,
       price,
     } = BookingDetails;
 
@@ -63,14 +64,16 @@ const ModalComponent = () => {
       passengerName,
       "pickupAddress: ",
       pickupAddress,
-      "pickupPostCode: ", pickupPostCode,
+      "pickupPostCode: ",
+      pickupPostCode,
       "destinationAddress:",
       destinationAddress,
       "destinationPostCode: ",
-      destinationPostCode
+      destinationPostCode,
+      "vias",
+      vias
     );
 
-    
     
 
     insertJobRequestHistory(
@@ -80,15 +83,16 @@ const ModalComponent = () => {
       pickupPostCode,
       destinationAddress,
       destinationPostCode,
+      vias,
       price,
       response
     )
       .then(() => {
         console.log("Data inserted successfully");
         navigation.navigate("Booking History", {
-            screen: "BookingHistory",
-            params: { timestamp: Date.now() },
-          });
+          screen: "BookingHistory",
+          params: { timestamp: Date.now() },
+        });
       })
       .catch((error) => {
         console.error("Error inserting data:", error);
