@@ -77,11 +77,11 @@ const DriverLocation = () => {
     displayContent = <Text>{errorMsg}</Text>; // Display error message if permission is denied
   } else if (location) {
     displayContent = (
-      <View>
-        <Text>Longitude: {location.longitude}</Text>
-        <Text>Latitude: {location.latitude}</Text>
-        <Text>Heading: {location.heading}</Text>
-        <Text>Speed: {location.speed}</Text>
+      <View >
+        <Text style ={{fontFamily: 'Roboto-Regular'}}>Longitude: {location.longitude}</Text>
+        <Text style ={{fontFamily: 'Roboto-Regular'}}>Latitude: {location.latitude}</Text>
+        <Text style ={{fontFamily: 'Roboto-Regular'}}>Heading: {location.heading}</Text>
+        <Text style ={{fontFamily: 'Roboto-Regular'}}>Speed: {location.speed}</Text>
       </View>
     );
   } else {

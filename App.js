@@ -20,48 +20,65 @@ import AuthContextProvider, { AuthContext } from "./context/AuthContext";
 import * as SplashScreen from "expo-splash-screen";
 import DriverLocation from "./screens/DriverLocation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import notificationContext from "./context/NotificationContext";
+import { useFonts } from "expo-font";
+import CustomDrawerContent from "./components/CustomDrawer";
 
 const Drawer = createDrawerNavigator();
 const BottomTab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
+SplashScreen.preventAutoHideAsync();
+
 function BookingStackNavigator() {
   return (
     <>
-    <StatusBar backgroundColor="#CD1A21" style="light" />
-    <Stack.Navigator>
-      <Stack.Screen
-        name="BookingHistory"
-        component={BookingHistoryScreen}
-        options={{ headerTitle: "Booking History", headerShown: false }}
-      />
-      <Stack.Screen
-        name="Map"
-        component={MapScreen}
-        options={{ headerTitle: "Map View", headerShown: false }}
-      />
-    </Stack.Navigator>
-
+      <StatusBar backgroundColor="#CD1A21" style="light" />
+      <Stack.Navigator>
+        <Stack.Screen
+          name="BookingHistory"
+          component={BookingHistoryScreen}
+          options={{ headerTitle: "Booking History", headerShown: false }}
+        />
+        <Stack.Screen
+          name="Map"
+          component={MapScreen}
+          options={{ headerTitle: "Map View", headerShown: false }}
+        />
+      </Stack.Navigator>
     </>
   );
 }
 function BottomTabNavigator() {
   return (
     <>
-    <StatusBar backgroundColor="#CD1A21" style="light" />
-    <BottomTab.Navigator>
-      <BottomTab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-sharp" color={color} size={size} />
-          ),
-          headerShown: false,
+      <StatusBar backgroundColor="#CD1A21" style="light" />
+      <BottomTab.Navigator
+        screenOptions={{
+          headerStyle: { backgroundColor: "#CD1A21" },
+          headerTintColor: "black",
+          tabBarActiveTintColor: "black",
+          tabBarInactiveTintColor: "white",
+          tabBarLabelStyle: { fontSize: 15 },
+          tabBarStyle: {
+            backgroundColor: "#CD1A21",
+            height: 60,
+            borderTopRightRadius: 20,
+            borderTopLeftRadius: 20,
+            overflow: "hidden",
+          },
         }}
-      />
-    </BottomTab.Navigator>
+      >
+        <BottomTab.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="home-sharp" color={color} size={size} />
+            ),
+            headerShown: false,
+          }}
+        />
+      </BottomTab.Navigator>
     </>
   );
 }
@@ -70,7 +87,18 @@ function DrawerNavigator() {
   return (
     <>
       <StatusBar backgroundColor="#CD1A21" style="light" />
-      <Drawer.Navigator>
+      <Drawer.Navigator
+        drawerContent={(props) => <CustomDrawerContent {...props} />}
+        screenOptions={{
+          drawerActiveTintColor: "#CD1A21",
+          drawerInactiveTintColor: "black",
+          headerStyle: { backgroundColor: "#CD1A21" },
+          headerTitleStyle: {
+            color: "white",
+            fontFamily: "Roboto-Bold",
+          },
+        }}
+      >
         <Drawer.Screen
           name="HomeScreen"
           component={BottomTabNavigator}
@@ -125,35 +153,34 @@ export default function App() {
     // show app loading screen
   }
 
-
-
   function AuthStack() {
     return (
       <>
-      <StatusBar backgroundColor="#CD1A21" style="light" />
-      <Stack.Navigator
-        screenOptions={{
-          headerStyle: { backgroundColor: "#CD1A21" },
-          headerTintColor: "white",
-          contentStyle: { backgroundColor: "#f4f4f4" },
-        }}
-      >
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Signup" component={SignupScreen} />
-      </Stack.Navigator>
-
+        <StatusBar backgroundColor="#CD1A21" style="light" />
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: { backgroundColor: "#CD1A21" },
+            headerTintColor: "white",
+            contentStyle: { backgroundColor: "#f4f4f4" },
+          }}
+        >
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Signup" component={SignupScreen} />
+        </Stack.Navigator>
       </>
     );
   }
 
-  SplashScreen.preventAutoHideAsync();
   function RootNavigator() {
     const authCtx = useContext(AuthContext);
+    const [loaded, error] = useFonts({
+      "Roboto-Regular": require("./assets/Fonts/Roboto/Roboto-Regular.ttf"),
+      "Roboto-Bold": require("./assets/Fonts/Roboto/Roboto-Bold.ttf"),
+    });
 
     useEffect(() => {
       async function loadToken() {
         try {
-          // Simulate checking token
           const storedToken = await AsyncStorage.getItem("token");
           if (storedToken) {
             authCtx.authenticate(storedToken);
@@ -161,7 +188,7 @@ export default function App() {
         } catch (e) {
           console.warn(e);
         } finally {
-          // Tell the app to hide the splash screen after token check
+          // Tell the app to hide the splash screen after token check and fonts are loaded
           setAppIsReady(true);
         }
       }
@@ -170,14 +197,13 @@ export default function App() {
     }, []);
 
     useEffect(() => {
-      if (appIsReady) {
-        // Hide the splash screen once the app is ready
+      if (appIsReady && (loaded || error)) {
         SplashScreen.hideAsync();
       }
-    }, [appIsReady]);
+    }, [appIsReady, loaded, error]);
 
-    if (!appIsReady) {
-      return null; // Return nothing while the splash screen is visible
+    if (!appIsReady || (!loaded && !error)) {
+      return null; // Return nothing while the splash screen is visible and fonts are loading
     }
 
     return (

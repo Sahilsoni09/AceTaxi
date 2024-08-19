@@ -21,7 +21,6 @@
       },
       "package": "com.ace.acetaxi",
       "googleServicesFile": "./google-services.json"
-
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -31,6 +30,14 @@
         "projectId": "ab996d7a-9e4c-4093-b166-10cf46beb513"
       }
     },
-    "owner": "sahilsoni009"
+    "owner": "sahilsoni009",
+    "plugins": [
+      [
+        "expo-font",
+        {
+          "fonts": ["./assets/Fonts/Roboto/Roboto-Regular.ttf"]
+        }
+      ]
+    ]
   }
 }

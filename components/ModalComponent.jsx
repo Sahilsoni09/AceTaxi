@@ -132,8 +132,9 @@ const ModalComponent = () => {
           <Text
             style={{
               marginBottom: height * 0.02, // 2% of screen height
-              fontSize: width * 0.06, // Responsive font size
+              fontSize: width * 0.05, // Responsive font size
               fontWeight: "600",
+              fontFamily: 'Roboto-Bold',
               textAlign: "center",
               color: "#333",
             }}
@@ -144,8 +145,8 @@ const ModalComponent = () => {
           <View style={{ marginBottom: height * 0.01 }}>
             <Text
               style={{
-                fontSize: width * 0.045, // Responsive font size
-                fontWeight: "bold",
+                fontSize: width * 0.040, // Responsive font size
+                fontFamily: 'Roboto-Bold',
                 color: "#555",
               }}
             >
@@ -153,7 +154,8 @@ const ModalComponent = () => {
             </Text>
             <Text
               style={{
-                fontSize: width * 0.045, // Responsive font size
+                fontSize: width * 0.035, // Responsive font size
+                fontFamily: 'Roboto-Regular',
                 color: "#000",
               }}
             >
@@ -164,8 +166,8 @@ const ModalComponent = () => {
           <View style={{ marginBottom: height * 0.01 }}>
             <Text
               style={{
-                fontSize: width * 0.045, // Responsive font size
-                fontWeight: "bold",
+                fontSize: width * 0.040, // Responsive font size
+                fontFamily: 'Roboto-Bold',
                 color: "#555",
               }}
             >
@@ -173,7 +175,8 @@ const ModalComponent = () => {
             </Text>
             <Text
               style={{
-                fontSize: width * 0.045, // Responsive font size
+                fontSize: width * 0.035, // Responsive font size
+                fontFamily: 'Roboto-Regular',
                 color: "#000",
               }}
             >
@@ -184,8 +187,8 @@ const ModalComponent = () => {
           <View style={{ marginBottom: height * 0.01 }}>
             <Text
               style={{
-                fontSize: width * 0.045, // Responsive font size
-                fontWeight: "bold",
+                fontSize: width * 0.040, // Responsive font size
+                fontFamily: 'Roboto-Bold',
                 color: "#555",
               }}
             >
@@ -193,7 +196,8 @@ const ModalComponent = () => {
             </Text>
             <Text
               style={{
-                fontSize: width * 0.045, // Responsive font size
+                fontSize: width * 0.035, // Responsive font size
+                fontFamily: 'Roboto-Regular',
                 color: "#000",
               }}
             >
@@ -204,8 +208,8 @@ const ModalComponent = () => {
           <View style={{ marginBottom: height * 0.01 }}>
             <Text
               style={{
-                fontSize: width * 0.045, // Responsive font size
-                fontWeight: "bold",
+                fontSize: width * 0.040, // Responsive font size
+                fontFamily: 'Roboto-Bold',
                 color: "#555",
               }}
             >
@@ -213,7 +217,8 @@ const ModalComponent = () => {
             </Text>
             <Text
               style={{
-                fontSize: width * 0.045, // Responsive font size
+                fontSize: width * 0.035, // Responsive font size
+                fontFamily: 'Roboto-Regular',
                 color: "#000",
               }}
             >
@@ -224,8 +229,8 @@ const ModalComponent = () => {
           <View style={{ marginBottom: height * 0.01 }}>
             <Text
               style={{
-                fontSize: width * 0.045, // Responsive font size
-                fontWeight: "bold",
+                fontSize: width * 0.040, // Responsive font size
+                fontFamily: 'Roboto-Bold',
                 color: "#555",
               }}
             >
@@ -233,7 +238,8 @@ const ModalComponent = () => {
             </Text>
             <Text
               style={{
-                fontSize: width * 0.045, // Responsive font size
+                fontSize: width * 0.035, // Responsive font size
+                fontFamily: 'Roboto-Regular',
                 color: "#000",
               }}
             >
@@ -244,8 +250,8 @@ const ModalComponent = () => {
           <View style={{ marginBottom: height * 0.02 }}>
             <Text
               style={{
-                fontSize: width * 0.045, // Responsive font size
-                fontWeight: "bold",
+                fontSize: width * 0.040, // Responsive font size
+                fontFamily: 'Roboto-Bold',
                 color: "#555",
               }}
             >
@@ -253,7 +259,8 @@ const ModalComponent = () => {
             </Text>
             <Text
               style={{
-                fontSize: width * 0.045, // Responsive font size
+                fontSize: width * 0.035, // Responsive font size
+                fontFamily: 'Roboto-Regular',
                 color: "#000",
               }}
             >
@@ -287,7 +294,7 @@ const ModalComponent = () => {
                 style={{
                   color: "white",
                   fontSize: width * 0.045, // Responsive font size
-                  fontWeight: "bold",
+                  fontFamily: 'Roboto-Bold',
                 }}
               >
                 Accept
@@ -313,7 +320,7 @@ const ModalComponent = () => {
                 style={{
                   color: "white",
                   fontSize: width * 0.045, // Responsive font size
-                  fontWeight: "bold",
+                  fontFamily: 'Roboto-Bold',
                 }}
               >
                 Decline

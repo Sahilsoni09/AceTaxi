@@ -143,12 +143,13 @@ const styles = StyleSheet.create({
   },
   headerText: {
     color: "#fff",
+    fontFamily: 'Roboto-Bold',
     fontSize: 16,
   },
   headerTitle: {
     color: "#fff",
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: 'Roboto-Bold',
     marginLeft: 20,
   },
 
@@ -172,17 +173,17 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   jobTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 16,
+    fontFamily: 'Roboto-Bold',
     color: "#333",
   },
   jobDetail: {
-    fontSize: 16,
+    fontSize: 14,
     marginBottom: 5,
     color: "#555",
   },
   label: {
-    fontWeight: "bold",
+    fontFamily: 'Roboto-Bold',
     color: "#444",
   },
   statusContainer: {
@@ -191,7 +192,7 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: 'Roboto-Bold',
   },
   statusAccepted: {
     color: "green",
@@ -209,6 +210,6 @@ const styles = StyleSheet.create({
   mapButtonText: {
     color: "#fff",
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: 'Roboto-Bold',
   },
 });

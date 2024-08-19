@@ -1,24 +1,24 @@
 import React from 'react';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { View, Image, StyleSheet,  Text, TouchableOpacity} from 'react-native';
-import { useTheme } from '../context/ThemeContext';
+// import { useTheme } from '../context/ThemeContext';
 
 
 const CustomDrawerContent = (props) => {
-  const { colorScheme, toggleTheme } = useTheme();
+  // const { colorScheme, toggleTheme } = useTheme();
 
   return (
     <DrawerContentScrollView {...props}>
       <View 
       style={styles.logoContainer}>
-        <Image source={require('../assets/logo.png')} style={styles.logo} />
+        <Image source={require('../assets/Ace.png')} style={styles.logo} />
       </View>
 
-      <TouchableOpacity onPress={toggleTheme} className="mt-4 p-2 rounded-full bg-gray-200 dark:bg-gray-800">
+      {/* <TouchableOpacity onPress={toggleTheme} className="mt-4 p-2 rounded-full bg-gray-200 dark:bg-gray-800">
         <Text className={`${colorScheme === 'dark' ? 'text-white' : 'text-black'}`}>
           Toggle Theme
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <DrawerItemList {...props} />
     </DrawerContentScrollView>

@@ -5,12 +5,18 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "GOOGLE_MAPS_APIKEY" : "AIzaSyD4pR99wUBL7JtFDAibNJnVAwBddoRLwZw"
+      }
     },
     "preview": {
       "distribution": "internal",
       "android": {
         "buildType": "apk"
+      },
+      "env": {
+        "GOOGLE_MAPS_APIKEY" : "AIzaSyD4pR99wUBL7JtFDAibNJnVAwBddoRLwZw"
       }
     },
     "production": {}

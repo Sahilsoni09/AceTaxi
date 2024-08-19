@@ -37,7 +37,7 @@ const OnlineStatusIndicator = () => {
     <View style ={styles.container}>
     <View style={[styles.statusIndicator, { backgroundColor: isOnline ? 'green' : 'red' }]} >
     </View>
-    <Text>{connectivity}</Text>
+    <Text style ={{fontFamily: 'Roboto-Bold'}}>{connectivity}</Text>
     </View>
 
   );

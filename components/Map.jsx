@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text, Dimensions } from "react-native";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
-// import { GOOGLE_MAPS_APIKEY } from "@env";
+import { GOOGLE_MAPS_APIKEY } from "@env";
 
 const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
@@ -44,7 +44,7 @@ const Map = () => {
         const response = await fetch(
           `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
             fullAddress
-          )} &key=AIzaSyD4pR99wUBL7JtFDAibNJnVAwBddoRLwZw`
+          )} &key=${process.env.GOOGLE_MAPS_APIKEY}`
         );
         const data = await response.json();
         if (data.results.length > 0) {
@@ -135,7 +135,7 @@ const Map = () => {
             origin={pickupCoords}
             destination={destinationCoords}
             waypoints={viasCoords}
-            apikey={"AIzaSyD4pR99wUBL7JtFDAibNJnVAwBddoRLwZw"}
+            apikey={process.env.GOOGLE_MAPS_APIKEY}
             strokeWidth={3}
             strokeColor="#CD1A21"
           />
