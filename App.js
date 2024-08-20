@@ -22,6 +22,8 @@ import DriverLocation from "./screens/DriverLocation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
 import CustomDrawerContent from "./components/CustomDrawer";
+import EarningsScreen from "./screens/Earnings";
+import IconButton from "./components/ui/IconButton";
 
 const Drawer = createDrawerNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -84,6 +86,7 @@ function BottomTabNavigator() {
 }
 
 function DrawerNavigator() {
+  const authCtx = useContext(AuthContext);
   return (
     <>
       <StatusBar backgroundColor="#CD1A21" style="light" />
@@ -127,7 +130,26 @@ function DrawerNavigator() {
             drawerIcon: ({ color, size }) => (
               <MaterialIcons name="my-location" size={24} color="black" />
             ),
-            headerShown: false,
+
+            headerRight: ({ tintColor }) => (
+              <IconButton
+                icon="exit"
+                color={"white"}
+                size={24}
+                onPress={() => {
+                  authCtx.logout();
+                }}
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Earnings"
+          component={EarningsScreen}
+          options={{
+            drawerIcon: ({ color, size }) => (
+              <MaterialIcons name="my-location" size={24} color="black" />
+            ),
           }}
         />
       </Drawer.Navigator>
@@ -208,11 +230,16 @@ export default function App() {
 
     return (
       <NavigationContainer>
-        {!authCtx.isAuthenticated && <AuthStack />}
+        {!authCtx.isAuthenticated && (
+          <>
+            
+            <AuthStack />
+          </>
+        )}
         {authCtx.isAuthenticated && (
           <>
-            <ModalComponent />
             <Notification />
+            <ModalComponent />
             <DrawerNavigator />
           </>
         )}

@@ -49,7 +49,7 @@ const BookingHistoryScreen = ({ navigation }) => {
       </Text>
 
       {/* Map Open */}
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.mapButton}
         onPress={() =>
           openMap(
@@ -62,7 +62,7 @@ const BookingHistoryScreen = ({ navigation }) => {
         } // Define the openMap function to handle navigation to map screen
       >
         <Text style={styles.mapButtonText}>View on Map</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 

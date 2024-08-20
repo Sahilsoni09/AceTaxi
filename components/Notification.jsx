@@ -42,11 +42,11 @@ const Notification = () => {
 
       if (response) {
         const bookingInfo =
-          response.notification.request.content.data.bookinginfo;
+          response.notification.request.content.data;
         setBookingDetails(bookingInfo);
 
         const { pickupAddress, destinationAddress } =
-          response.notification.request.content.data.bookinginfo;
+          response.notification.request.content.data;
 
         if (pickupAddress === undefined || destinationAddress === undefined) {
           
@@ -73,10 +73,10 @@ const Notification = () => {
         );
 
         const bookingInfo =
-          response.notification.request.content.data.bookinginfo;
+          response.notification.request.content.data;
 
         const { pickupAddress, destinationAddress } =
-          response.notification.request.content.data.bookinginfo;
+          response.notification.request.content.data;
 
         if (pickupAddress && destinationAddress) {
           setBookingDetails(bookingInfo);
