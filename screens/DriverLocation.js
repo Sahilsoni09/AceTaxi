@@ -5,6 +5,9 @@ import * as Location from 'expo-location';
 import axios from 'axios';
 import OnlineStatusIndicator from '../components/OnlineStatusIndicator';
 import { AuthContext } from '../context/AuthContext';
+import { startBackgroundUpdate, stopBackgroundUpdate } from '../components/BackgroundLocationTask';
+
+
 
 const DriverLocation = () => {
   const [location, setLocation] = useState(null); // State to store location data
@@ -34,7 +37,7 @@ const DriverLocation = () => {
           const { longitude, latitude, heading, speed } = newLocation.coords;
           const locationData = {
             userId: userId,
-            longitude: longitude,
+            longtitude: longitude,
             latitude: latitude,
             heading: heading,
             speed: speed,
@@ -47,11 +50,25 @@ const DriverLocation = () => {
       );
     };
 
+    
     getLocationUpdates();
+
+    if (isOnline) {
+      startBackgroundUpdate(); 
+    } else {
+      stopBackgroundUpdate(); 
+    }
+
+    return () => {
+      stopBackgroundUpdate(); 
+    };
+
   }, [isOnline]); // Re-run effect if online status changes
 
   // Function to send location data to the API
   const sendLocationToApi = async (coords) => {
+
+    console.log(coords)
     const BASE = 'https://api.acetaxisdorset.co.uk';
     const url = `${BASE}/api/UserProfile/UpdateGPS`;
 
@@ -62,9 +79,9 @@ const DriverLocation = () => {
       };
  
       await axios.post(url, coords, { headers }); // Send POST request to the API with location data
-    //   console.log('Location sent to API');
+      console.log('Location sent to API');
     } catch (error) {
-      // console.error('Error sending location to API:', error);
+      console.error('Error sending location to API:', error);
       // Alert.alert(
       //   'Internet Connection',
       //   'You are offline. Some features may not be available.'
@@ -78,7 +95,7 @@ const DriverLocation = () => {
   } else if (location) {
     displayContent = (
       <View >
-        <Text style ={{fontFamily: 'Roboto-Regular'}}>Longitude: {location.longitude}</Text>
+        <Text style ={{fontFamily: 'Roboto-Regular'}}>Longitude: {location.longtitude}</Text>
         <Text style ={{fontFamily: 'Roboto-Regular'}}>Latitude: {location.latitude}</Text>
         <Text style ={{fontFamily: 'Roboto-Regular'}}>Heading: {location.heading}</Text>
         <Text style ={{fontFamily: 'Roboto-Regular'}}>Speed: {location.speed}</Text>
