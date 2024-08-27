@@ -21,7 +21,7 @@ const BackgroundLocationTracker = () => {
   token = authCtx.tokenRef;
 
 
-  console.log("token in component" , token.current);
+  
   useEffect(() => {
     const requestPermissions = async () => {
       const { status: foregroundStatus } =
@@ -120,7 +120,7 @@ const BackgroundLocationTracker = () => {
       }
 
       console.log("Location sent to API from background at", currentTime);
-      console.log("token", token.current);
+      // console.log("token", token.current);
     } catch (error) {
       // Handle network errors or other unexpected errors
       setApiStatus(`Failed: ${error.message}`);

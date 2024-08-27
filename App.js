@@ -4,7 +4,12 @@ import { StyleSheet, Text, View } from "react-native";
 import HomeScreen from "./screens/Home";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import {
+  FontAwesome,
+  Ionicons,
+  MaterialIcons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ModalComponent from "./components/ModalComponent";
 import BookingDetailContextProvider from "./context/BookingDetailContextProvider";
@@ -27,6 +32,8 @@ import IconButton from "./components/ui/IconButton";
 import BackgroundLocation from "./screens/BackgroundLocationScreen";
 import BackgroundLocationTracker from "./components/BackgroundLocationTask";
 import BackgroundLocationScreen from "./screens/BackgroundLocationScreen";
+import LogScreen from "./screens/LogScreen";
+import { LogContextProvider } from "./context/LogContextProvider";
 
 const Drawer = createDrawerNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -79,6 +86,16 @@ function BottomTabNavigator() {
           options={{
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="home-sharp" color={color} size={size} />
+            ),
+            headerShown: false,
+          }}
+        />
+        <BottomTab.Screen
+          name="LogScreen"
+          component={LogScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name="console" size={24} color="white" />
             ),
             headerShown: false,
           }}
@@ -272,11 +289,13 @@ export default function App() {
 
   return (
     <AuthContextProvider>
-      <BookingDetailContextProvider>
-        <NotifcationContextProvider>
-          <RootNavigator />
-        </NotifcationContextProvider>
-      </BookingDetailContextProvider>
+      <LogContextProvider>
+        <BookingDetailContextProvider>
+          <NotifcationContextProvider>
+            <RootNavigator />
+          </NotifcationContextProvider>
+        </BookingDetailContextProvider>
+      </LogContextProvider>
     </AuthContextProvider>
   );
 }
