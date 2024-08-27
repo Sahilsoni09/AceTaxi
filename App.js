@@ -33,7 +33,7 @@ import BackgroundLocation from "./screens/BackgroundLocationScreen";
 import BackgroundLocationTracker from "./components/BackgroundLocationTask";
 import BackgroundLocationScreen from "./screens/BackgroundLocationScreen";
 import LogScreen from "./screens/LogScreen";
-import { LogContextProvider } from "./context/LogContextProvider";
+import { LogContextProvider } from "./context/LogContext";
 
 const Drawer = createDrawerNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -78,6 +78,10 @@ function BottomTabNavigator() {
             borderTopLeftRadius: 20,
             overflow: "hidden",
           },
+          headerTitleStyle: {
+            color: "white",
+            fontFamily: "Roboto-Bold",
+          },
         }}
       >
         <BottomTab.Screen
@@ -91,13 +95,13 @@ function BottomTabNavigator() {
           }}
         />
         <BottomTab.Screen
-          name="LogScreen"
+          name="Logs"
           component={LogScreen}
           options={{
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons name="console" size={24} color="white" />
             ),
-            headerShown: false,
+            
           }}
         />
       </BottomTab.Navigator>

@@ -4,6 +4,7 @@ const database = SQLite.openDatabase("JobsDetails.db");
 
 export function init() {
   // Setup the base structure with the table creation
+  
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
@@ -21,6 +22,7 @@ export function init() {
         [], // Parameters for the query, none in this case
         () => {
           console.log("Table created successfully");
+
           resolve(); // Resolve if table creation is successful
         },
         (_, error) => {

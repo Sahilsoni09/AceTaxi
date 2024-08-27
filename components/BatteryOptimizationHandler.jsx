@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   Text,
@@ -11,10 +11,13 @@ import {
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import * as Battery from "expo-battery";
+import LogContext from "../context/LogContext";
 
 const BatteryOptimizationHandler = () => {
   const [modalVisible, setModalVisible] = useState(false);
-
+  
+  const {addLog} = useContext(LogContext);
+  
   useFocusEffect(
     React.useCallback(() => {
       const checkBatteryOptimization = async () => {
@@ -23,6 +26,7 @@ const BatteryOptimizationHandler = () => {
             await Battery.isBatteryOptimizationEnabledAsync();
 
           if (isBatteryOptimizationEnabled) {
+            addLog("Battery Optimization enabled Need to disable"); 
             setModalVisible(true); // Show the modal if battery optimization is enabled
           }
         }

@@ -5,6 +5,7 @@ import * as Location from "expo-location";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { AppState } from "react-native";
+import LogContext from "../context/LogContext";
 
 const LOCATION_TASK_NAME = "background-location-task";
 
@@ -20,8 +21,9 @@ const BackgroundLocationTracker = () => {
   const authCtx = useContext(AuthContext);
   token = authCtx.tokenRef;
 
-
+  const {addLog} = useContext(LogContext);
   
+   
   useEffect(() => {
     const requestPermissions = async () => {
       const { status: foregroundStatus } =
@@ -31,8 +33,10 @@ const BackgroundLocationTracker = () => {
 
       if (foregroundStatus !== "granted" || backgroundStatus !== "granted") {
         console.log("Permission to access location was denied");
+        addLog("Permission to access location was denied");
       } else {
         console.log("Permission to access location granted");
+        addLog("Permission to access location granted");
         setPermission(true);
       }
     };
@@ -43,7 +47,7 @@ const BackgroundLocationTracker = () => {
   useEffect(() => {
     if (!permission) return;
     console.log("Starting location tracking...");
-
+    addLog("Starting location tracking...");
     startLocationTracking();
   }, [permission]);
 
@@ -68,6 +72,7 @@ const BackgroundLocationTracker = () => {
   TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
     if (error) {
       console.error("Background location task error:", error);
+      addLog(`Background location task error: ${error.message}`);
       return;
     }
     if (data) {
@@ -88,6 +93,7 @@ const BackgroundLocationTracker = () => {
         setLocationData(newLocationData);
 
         console.log("Background location:", newLocationData);
+        addLog(`Location: ${JSON.stringify(newLocationData)}`);
 
         // Send the location to your API
         if(token.current)
@@ -120,11 +126,13 @@ const BackgroundLocationTracker = () => {
       }
 
       console.log("Location sent to API from background at", currentTime);
+      addLog(`Location sent to API at ${currentTime}`);
       // console.log("token", token.current);
     } catch (error) {
       // Handle network errors or other unexpected errors
       setApiStatus(`Failed: ${error.message}`);
       console.error("Error sending location to API:", error);
+      addLog(`Error sending location to API: ${error.message}`);
     }
   };
 
@@ -142,6 +150,7 @@ const BackgroundLocationTracker = () => {
       console.log("Background location tracking started");
     } else {
       console.error("Background location permission not granted");
+      addLog("Background location permission not granted");
     }
   };
 
