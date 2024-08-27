@@ -16,12 +16,19 @@
       "infoPlist": {
         "NSLocationAlwaysUsageDescription": "This app uses your location in the background to track your movement.",
         "NSLocationWhenInUseUsageDescription": "This app uses your location to track your movement.",
-        "UIBackgroundModes": ["location"]
+        "UIBackgroundModes": [
+          "location"
+        ]
       }
     },
     "android": {
-
-      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "ACCESS_BACKGROUND_LOCATION"],
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE",
+        "FOREGROUND_SERVICE_LOCATION"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -34,15 +41,17 @@
     },
     "extra": {
       "eas": {
-        "projectId": "ab996d7a-9e4c-4093-b166-10cf46beb513"
+        "projectId": "4e37a92e-6509-4aa2-ad62-3fffeb456a3a"
       }
     },
-    "owner": "sahilsoni009",
+    "owner": "soni0903",
     "plugins": [
       [
         "expo-font",
         {
-          "fonts": ["./assets/Fonts/Roboto/Roboto-Regular.ttf"]
+          "fonts": [
+            "./assets/Fonts/Roboto/Roboto-Regular.ttf"
+          ]
         }
       ]
     ]

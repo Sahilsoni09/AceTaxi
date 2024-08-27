@@ -24,6 +24,9 @@ import { useFonts } from "expo-font";
 import CustomDrawerContent from "./components/CustomDrawer";
 import EarningsScreen from "./screens/Earnings";
 import IconButton from "./components/ui/IconButton";
+import BackgroundLocation from "./screens/BackgroundLocationScreen";
+import BackgroundLocationTracker from "./components/BackgroundLocationTask";
+import BackgroundLocationScreen from "./screens/BackgroundLocationScreen";
 
 const Drawer = createDrawerNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -123,7 +126,7 @@ function DrawerNavigator() {
             headerShown: false,
           }}
         />
-        <Drawer.Screen
+        {/* <Drawer.Screen
           name="Driver Location"
           component={DriverLocation}
           options={{
@@ -137,6 +140,27 @@ function DrawerNavigator() {
                 color={"white"}
                 size={24}
                 onPress={() => {
+                  authCtx.logout();
+                }}
+              />
+            ),
+          }}
+        /> */}
+        <Drawer.Screen
+          name="Driver Location"
+          component={BackgroundLocationScreen}
+          options={{
+            drawerIcon: ({ color, size }) => (
+              <MaterialIcons name="my-location" size={24} color="black" />
+            ),
+
+            headerRight: ({ tintColor }) => (
+              <IconButton
+                icon="exit"
+                color={"white"}
+                size={24}
+                onPress={() => {
+                  console.log("logout triggere");
                   authCtx.logout();
                 }}
               />
@@ -232,7 +256,6 @@ export default function App() {
       <NavigationContainer>
         {!authCtx.isAuthenticated && (
           <>
-            
             <AuthStack />
           </>
         )}

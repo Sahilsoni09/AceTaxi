@@ -1,27 +1,53 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import * as TaskManager from "expo-task-manager";
 import * as Location from "expo-location";
-import axios from "axios";
-import { AuthContext } from "../context/AuthContext";
-import { AppState } from "react-native";
 
 const LOCATION_TASK_NAME = "background-location-task";
 
-let token;
-const BackgroundLocationTracker = () => {
+// Task Manager for background location tracking
+TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
+  if (error) {
+    console.error("Background location task error:", error);
+    return;
+  }
+  if (data) {
+    const { locations } = data;
+    const location = locations[0];
+    if (location) {
+      const { longitude, latitude, heading, speed } = location.coords;
+      const driverSpeed = +speed.toFixed(2);
+      const newLocationData = {
+        userId: 8, // Replace with your dynamic userId
+        longtitude: longitude,
+        latitude: latitude,
+        heading: 0,
+        speed: driverSpeed,
+      };
+
+      // // Update the state with the new location data
+      // setLocationData(newLocationData);
+
+      console.log("Background location:", newLocationData);
+      console.log(
+        "Location genrated at",
+        new Date().toLocaleTimeString()
+      );
+      
+      
+
+      // // Send the location to your API
+
+      // await sendLocationToApi(newLocationData);
+    }
+  }
+});
+const BackgroundLocation = () => {
   const [locationStarted, setLocationStarted] = useState(false);
   const [locationData, setLocationData] = useState(null); // State to store location data
   const [lastSentTime, setLastSentTime] = useState(null); // State to store last sent time
   const [apiStatus, setApiStatus] = useState(""); // State to store API status
-  
-  const [permission, setPermission] = useState(false);
 
-  const authCtx = useContext(AuthContext);
-  token = authCtx.tokenRef;
-
-
-  console.log("token in component" , token.current);
   useEffect(() => {
     const requestPermissions = async () => {
       const { status: foregroundStatus } =
@@ -33,21 +59,13 @@ const BackgroundLocationTracker = () => {
         console.log("Permission to access location was denied");
       } else {
         console.log("Permission to access location granted");
-        setPermission(true);
       }
     };
 
     requestPermissions();
   }, []);
 
-  useEffect(() => {
-    if (!permission) return;
-    console.log("Starting location tracking...");
-
-    startLocationTracking();
-  }, [permission]);
-
-
+ 
 
   // // Stop location tracking when the user logs out
   // useEffect(() => {
@@ -64,38 +82,6 @@ const BackgroundLocationTracker = () => {
   //   }
   // });
 
-  // Task Manager for background location tracking
-  TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
-    if (error) {
-      console.error("Background location task error:", error);
-      return;
-    }
-    if (data) {
-      const { locations } = data;
-      const location = locations[0];
-      if (location) {
-        const { longitude, latitude, heading, speed } = location.coords;
-        const driverSpeed = +speed.toFixed(2);
-        const newLocationData = {
-          userId: 8, // Replace with your dynamic userId
-          longtitude: longitude,
-          latitude: latitude,
-          heading: 0,
-          speed: driverSpeed,
-        };
-
-        // Update the state with the new location data
-        setLocationData(newLocationData);
-
-        console.log("Background location:", newLocationData);
-
-        // Send the location to your API
-        if(token.current)
-        await sendLocationToApi(newLocationData);
-      }
-    }
-  });
-
   // Function to send location data to the API
   const sendLocationToApi = async (coords) => {
     const BASE = "https://api.acetaxisdorset.co.uk";
@@ -104,7 +90,7 @@ const BackgroundLocationTracker = () => {
     try {
       const headers = {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token.current}`,// Use the token from context
+        Authorization: `Bearer ${token}`, // Use the token from context
       };
 
       const response = await axios.post(url, coords, { headers });
@@ -120,7 +106,7 @@ const BackgroundLocationTracker = () => {
       }
 
       console.log("Location sent to API from background at", currentTime);
-      console.log("token", token.current);
+      console.log("token", token);
     } catch (error) {
       // Handle network errors or other unexpected errors
       setApiStatus(`Failed: ${error.message}`);
@@ -134,7 +120,7 @@ const BackgroundLocationTracker = () => {
     if (status === "granted") {
       await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
         accuracy: Location.Accuracy.High,
-        timeInterval: 500,
+        timeInterval: 1000,
         distanceInterval: 0,
         pausesUpdatesAutomatically: false,
       });
@@ -163,7 +149,7 @@ const BackgroundLocationTracker = () => {
 
   return (
     <View style={styles.container}>
-      {/* {locationStarted ? (
+      {locationStarted ? (
         <TouchableOpacity onPress={stopLocationTracking}>
           <Text style={styles.btnText}>Stop Tracking</Text>
         </TouchableOpacity>
@@ -171,43 +157,6 @@ const BackgroundLocationTracker = () => {
         <TouchableOpacity onPress={startLocationTracking}>
           <Text style={styles.btnText}>Start Tracking</Text>
         </TouchableOpacity>
-      )} */}
-
-      
-
-      {/* Display the location data */}
-      {locationData ? (
-        <View style={styles.locationContainer}>
-          <Text style={styles.locationText}>
-            Longitude: {locationData.longtitude}
-          </Text>
-          <Text style={styles.locationText}>
-            Latitude: {locationData.latitude}
-          </Text>
-          <Text style={styles.locationText}>
-            Heading: {locationData.heading}
-          </Text>
-          <Text style={styles.locationText}>Speed: {locationData.speed}</Text>
-        </View>
-      ) : (
-        <Text>Fetching Location....</Text>
-      )}
-
-      {/* Display the last sent time */}
-      {lastSentTime && (
-        <Text style={styles.sentTimeText}>Last Sent Time: {lastSentTime}</Text>
-      )}
-
-      {/* Display the API status */}
-      {apiStatus && (
-        <Text
-          style={[
-            styles.apiStatusText,
-            { color: apiStatus.includes("Success") ? "green" : "red" },
-          ]}
-        >
-          API Status: {apiStatus}
-        </Text>
       )}
     </View>
   );
@@ -252,4 +201,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BackgroundLocationTracker;
+export default BackgroundLocation;

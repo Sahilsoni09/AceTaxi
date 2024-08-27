@@ -10,7 +10,8 @@ import notificationContext from '../context/NotificationContext';
 
 function LoginScreen() {
     const {expoToken} = useContext(notificationContext)
-
+    const authCtx = useContext(AuthContext);
+    console.log("tokenva", authCtx.token);
     useEffect (()=>{
         submitDriverId();
       },[expoToken])
@@ -39,7 +40,7 @@ function LoginScreen() {
 
 
     const [isAuthenticating, setIsAuthenticating] = useState(false);
-    const authCtx = useContext(AuthContext);
+    
 
     async function loginHandler({username,password}) {
         console.log(username, password);

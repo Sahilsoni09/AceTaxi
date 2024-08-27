@@ -35,12 +35,13 @@ const DriverLocation = () => {
         },
         (newLocation) => {
           const { longitude, latitude, heading, speed } = newLocation.coords;
+          const driverSpeed = +speed.toFixed(2);
           const locationData = {
             userId: userId,
             longtitude: longitude,
             latitude: latitude,
-            heading: heading,
-            speed: speed,
+            heading: 0,
+            speed: driverSpeed,
           };
           setLocation(locationData); // Update location state
           if (isOnline) {
