@@ -34,6 +34,14 @@ import BackgroundLocationTracker from "./components/BackgroundLocationTask";
 import BackgroundLocationScreen from "./screens/BackgroundLocationScreen";
 import LogScreen from "./screens/LogScreen";
 import { LogContextProvider } from "./context/LogContext";
+import * as Sentry from "@sentry/react-native";
+
+Sentry.init({
+  dsn: "https://d8e473d6b6b9cde2cdb43a744e9d310f@o4507848991375360.ingest.us.sentry.io/4507853493960704",
+
+  // uncomment the line below to enable Spotlight (https://spotlightjs.com)
+  // enableSpotlight: __DEV__,
+});
 
 const Drawer = createDrawerNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -101,7 +109,6 @@ function BottomTabNavigator() {
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons name="console" size={24} color="white" />
             ),
-            
           }}
         />
       </BottomTab.Navigator>
@@ -201,7 +208,7 @@ function DrawerNavigator() {
     </>
   );
 }
-export default function App() {
+function App() {
   const [dbinitialized, setDbInitialized] = useState(false);
   const [appIsReady, setAppIsReady] = useState(false);
 
@@ -292,17 +299,19 @@ export default function App() {
   }
 
   return (
-    <AuthContextProvider>
-      <LogContextProvider>
+    <LogContextProvider>
+      <AuthContextProvider>
         <BookingDetailContextProvider>
           <NotifcationContextProvider>
             <RootNavigator />
           </NotifcationContextProvider>
         </BookingDetailContextProvider>
-      </LogContextProvider>
-    </AuthContextProvider>
+      </AuthContextProvider>
+    </LogContextProvider>
   );
 }
+
+export default Sentry.wrap(App);
 
 const styles = StyleSheet.create({
   container: {

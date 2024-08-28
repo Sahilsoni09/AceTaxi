@@ -12,6 +12,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
 import { AuthContext } from "../context/AuthContext";
+import Button from "../components/ui/Button";
+import * as Sentry from "@sentry/react-native";
 
 const { width } = Dimensions.get("window");
 
@@ -118,6 +120,11 @@ const HomeScreen = ({ navigation }) => {
             <Text>test</Text>
           </TouchableOpacity>
         </View>
+        {/* <Button title='Try!' onPress={ () => { Sentry.addBreadcrumb({
+          category: "log",
+          message: "testing",
+          level: "info",
+        }); }}/> */}
       </ScrollView>
     </SafeAreaView>
   );

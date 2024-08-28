@@ -12,12 +12,18 @@ import {
 import { useFocusEffect } from "@react-navigation/native";
 import * as Battery from "expo-battery";
 import LogContext from "../context/LogContext";
+import * as Sentry from "@sentry/react-native";
+import BookingDetailContext from "../context/BookingDetailContext";
+
 
 const BatteryOptimizationHandler = () => {
   const [modalVisible, setModalVisible] = useState(false);
   
   const {addLog} = useContext(LogContext);
-  
+
+  const { isPermissionGranted,
+    setIsPermissionGranted } = useContext(BookingDetailContext);
+     
   useFocusEffect(
     React.useCallback(() => {
       const checkBatteryOptimization = async () => {
@@ -27,7 +33,13 @@ const BatteryOptimizationHandler = () => {
 
           if (isBatteryOptimizationEnabled) {
             addLog("Battery Optimization enabled Need to disable"); 
+            Sentry.captureMessage("Battery Optimization enabled Need to disable", 'info');
+
+            if(isPermissionGranted)
             setModalVisible(true); // Show the modal if battery optimization is enabled
+          }else{
+            addLog("Battery Saver disabled"); 
+            Sentry.captureMessage("Battery Saver disabled", 'info');
           }
         }
       };
@@ -38,7 +50,7 @@ const BatteryOptimizationHandler = () => {
       return () => {
         // Perform any cleanup if needed when the screen is unfocused
       };
-    }, []) // Empty dependency array means this effect runs on every screen focus
+    }, [isPermissionGranted]) // Empty dependency array means this effect runs on every screen focus
   );
 
   const openAppInfoScreen = () => {
@@ -48,11 +60,14 @@ const BatteryOptimizationHandler = () => {
       Linking.openSettings().catch((error) => {
         console.error("Failed to open app info screen:", error);
         Alert.alert("Error", "Failed to open app info screen.");
+        Sentry.captureException(new Error(`Failed to open app info screen ${error.message}`));
+
       });
     } else if (Platform.OS === "ios") {
       Linking.openURL("app-settings:").catch((error) => {
         console.error("Failed to open app info screen:", error);
         Alert.alert("Error", "Failed to open app info screen.");
+        Sentry.captureException(new Error(`Failed to open app info screen ${error.message}`));
       });
     }
   };

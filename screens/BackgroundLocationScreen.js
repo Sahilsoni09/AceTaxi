@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, { useContext, useEffect } from 'react'
-import BackgroundLocation from '../components/BackgroundLocation'
+
 import BackgroundLocationTracker from '../components/BackgroundLocationTask'
 import { AuthContext } from '../context/AuthContext'
 import BatteryOptimizationHandler from '../components/BatteryOptimizationHandler'
@@ -8,9 +8,11 @@ import BatteryOptimizationHandler from '../components/BatteryOptimizationHandler
 
 
 const BackgroundLocationScreen = () => {
+
   const authCtx = useContext(AuthContext);
   token = authCtx.token;
-  console.log("background location screen", token);
+
+  
 
   // Trigger a re-render when the token changes
   useEffect(() => {

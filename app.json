@@ -53,6 +53,14 @@
             "./assets/Fonts/Roboto/Roboto-Regular.ttf"
           ]
         }
+      ],
+      [
+        "@sentry/react-native/expo",
+        {
+          "url": "https://sentry.io/",
+          "project": "ace-taxi",
+          "organization": "backend-coders-india-dd"
+        }
       ]
     ]
   }

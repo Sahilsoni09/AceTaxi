@@ -6,12 +6,17 @@ import { Alert } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
 import NotifcationContextProvider from '../context/NotifcationContextProvider';
 import notificationContext from '../context/NotificationContext';
-
+import * as Sentry from "@sentry/react-native";
+import LogContext from '../context/LogContext';
 
 function LoginScreen() {
     const {expoToken} = useContext(notificationContext)
+
     const authCtx = useContext(AuthContext);
-    console.log("tokenva", authCtx.token);
+   
+
+    const {addLog} = useContext(LogContext);
+
     useEffect (()=>{
         submitDriverId();
       },[expoToken])
@@ -48,12 +53,20 @@ function LoginScreen() {
         try{
             const token = await login(username, password);
             authCtx.authenticate(token);
+
+            addLog(`User ${username} logged in successfully`);
+            Sentry.captureMessage(`User ${username} logged in successfully`, 'log');
+
         }catch(error){
             Alert.alert(
                 'Authentication failed',
                 'Could not log you in. Please check your credentials and try again later!'
             )
             setIsAuthenticating(false);
+
+            addLog(`Authentication failed: ${error}`);
+
+            Sentry.captureException(new Error( `Authentication failed: ${error}`));
         }
         // setIsAuthenticating(false);
     }
