@@ -16,7 +16,10 @@
         "buildType": "apk"
       },
       "env": {
-        "GOOGLE_MAPS_APIKEY" : "AIzaSyD4pR99wUBL7JtFDAibNJnVAwBddoRLwZw"
+        "GOOGLE_MAPS_APIKEY" : "AIzaSyD4pR99wUBL7JtFDAibNJnVAwBddoRLwZw",
+        "SENTRY_AUTH_TOKEN": "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",
+        "SENTRY_ORG": "backend-coders-india-dd",
+        "SENTRY_PROJECT": "ace-taxi"
       }
     },
     "production": {}

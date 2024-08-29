@@ -80,7 +80,7 @@ const BackgroundLocationTracker = () => {
         const { longitude, latitude, heading, speed } = location.coords;
         const driverSpeed = +speed.toFixed(2);
         const newLocationData = {
-          userId: 8, // Replace with your dynamic userId
+          userId: 20, // Replace with your dynamic userId
           longtitude: longitude,
           latitude: latitude,
           heading: 0,
@@ -126,7 +126,7 @@ const BackgroundLocationTracker = () => {
 
       console.log("Location sent to API from background at", currentTime);
       addLog(`Location sent to API at ${currentTime}`);
-      Sentry.captureMessage(`Location sent to API at ${currentTime}`, 'log');
+      Sentry.captureMessage(`Location sent to API at: ${currentTime}`, 'log');
 
 
       // console.log("token", token.current);
@@ -149,6 +149,7 @@ const BackgroundLocationTracker = () => {
         timeInterval: 500,
         distanceInterval: 0,
         pausesUpdatesAutomatically: false,
+        
       });
       setLocationStarted(true);
       console.log("Background location tracking started");
