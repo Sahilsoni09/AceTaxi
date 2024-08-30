@@ -28,7 +28,7 @@ const HomeScreen = ({ navigation }) => {
             <Ionicons name="menu" size={24} color="white" />
           </TouchableOpacity>
           <View style={styles.insideHeader}>
-            <Text style={styles.title}>Ace Taxi</Text>
+            <Text style={styles.title} >Ace Taxis</Text>
             <Image
               source={require("../assets/logo-removebg-preview.png")}
               style={styles.logo}

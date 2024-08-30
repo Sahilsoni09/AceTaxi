@@ -11,6 +11,7 @@ module.exports = function (api) {
           path: ".env",
         },
       ],
+      ["nativewind/babel"],
     ],
   };
 };

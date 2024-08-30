@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "AceTaxi",
+    "name": "AceTaxis",
     "slug": "acetaxi",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#CD1A21"
     },
     "ios": {
       "supportsTablet": true,
@@ -30,7 +30,7 @@
         "FOREGROUND_SERVICE_LOCATION"
       ],
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
+        "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#CD1A21"
       },
       "package": "com.ace.acetaxi",

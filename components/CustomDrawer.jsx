@@ -1,13 +1,16 @@
-import React, { useContext } from 'react';
-import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
-import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { AuthContext } from '../context/AuthContext';
-// import { useTheme } from '../context/ThemeContext';
+import React, { useContext } from "react";
+import {
+  DrawerContentScrollView,
+  DrawerItemList,
+} from "@react-navigation/drawer";
+import { View, Image, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { AuthContext } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 
 
 const CustomDrawerContent = (props) => {
-  // const { colorScheme, toggleTheme } = useTheme();
-  
+  const { theme, toggleTheme } = useTheme();
+
   const authCtx = useContext(AuthContext);
 
   const handleLogout = () => {
@@ -17,14 +20,18 @@ const CustomDrawerContent = (props) => {
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.logoContainer}>
-        <Image source={require('../assets/Ace.png')} style={styles.logo} />
+
+        {/* <TouchableOpacity style={styles.circularButton} onPress={toggleTheme}>
+          <Text style={styles.buttonText} className={`${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+            {theme === "light" ? "🌙" : "☀️"}{" "}
+            
+          </Text>
+        </TouchableOpacity> */}
+
+        <Image source={require("../assets/Ace.png")} style={styles.logo} />
       </View>
 
-      {/* <TouchableOpacity onPress={toggleTheme} style={styles.themeToggleButton}>
-        <Text style={styles.themeToggleText}>
-          Toggle Theme
-        </Text>
-      </TouchableOpacity> */}
+     
 
       <DrawerItemList {...props} />
 
@@ -39,39 +46,44 @@ const CustomDrawerContent = (props) => {
 
 const styles = StyleSheet.create({
   logoContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginVertical: 20,
   },
   logo: {
     width: 100,
     height: 100,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
-  // Uncomment and modify the following styles if using theme toggle
-  // themeToggleButton: {
-  //   marginVertical: 10,
-  //   padding: 10,
-  //   borderRadius: 5,
-  //   backgroundColor: '#f0f0f0',
-  // },
-  // themeToggleText: {
-  //   color: '#000',
-  // },
+  circularButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 25, // Circular shape
+   
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    top: -20, // Position the button at the top of the drawer
+    right: 20, // Align it to the right side
+  },
+  buttonText: {
+   
+    fontSize: 24,
+  },
   logoutContainer: {
-    marginTop: 'auto', // Pushes the logout button to the bottom
+    marginTop: "auto", // Pushes the logout button to the bottom
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderTopWidth: 1,
-    borderTopColor: '#ddd',
+    borderTopColor: "#ddd",
   },
   logoutButton: {
-    backgroundColor: '#CD1A21', // Red color for logout button
+    backgroundColor: "#CD1A21", // Red color for logout button
     padding: 10,
     borderRadius: 5,
-    alignItems: 'center',
+    alignItems: "center",
   },
   logoutText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
   },
 });

@@ -2,7 +2,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import HomeScreen from "./screens/Home";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer} from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   FontAwesome,
@@ -35,6 +35,7 @@ import BackgroundLocationScreen from "./screens/BackgroundLocationScreen";
 import LogScreen from "./screens/LogScreen";
 import { LogContextProvider } from "./context/LogContext";
 import * as Sentry from "@sentry/react-native";
+import { ThemeContextProvider, useTheme } from "./context/ThemeContext";
 
 Sentry.init({
   dsn: "https://d8e473d6b6b9cde2cdb43a744e9d310f@o4507848991375360.ingest.us.sentry.io/4507853493960704",
@@ -117,6 +118,7 @@ function BottomTabNavigator() {
 }
 
 function DrawerNavigator() {
+  const { theme } = useTheme();
   const authCtx = useContext(AuthContext);
   return (
     <>
@@ -125,11 +127,14 @@ function DrawerNavigator() {
         drawerContent={(props) => <CustomDrawerContent {...props} />}
         screenOptions={{
           drawerActiveTintColor: "#CD1A21",
-          drawerInactiveTintColor: "black",
+          drawerInactiveTintColor: theme === "dark" ? "white" : "black",
           headerStyle: { backgroundColor: "#CD1A21" },
           headerTitleStyle: {
             color: "white",
             fontFamily: "Roboto-Bold",
+          },
+          drawerStyle: {
+            backgroundColor: theme === "dark" ? "black" : "white",
           },
         }}
       >
@@ -179,7 +184,7 @@ function DrawerNavigator() {
           component={BackgroundLocationScreen}
           options={{
             drawerIcon: ({ color, size }) => (
-              <MaterialIcons name="my-location" size={24} color="black" />
+              <MaterialIcons name="my-location" size={size} color={color} />
             ),
 
             headerRight: ({ tintColor }) => (
@@ -200,7 +205,7 @@ function DrawerNavigator() {
           component={EarningsScreen}
           options={{
             drawerIcon: ({ color, size }) => (
-              <MaterialIcons name="my-location" size={24} color="black" />
+              <Ionicons name="card" color={color} size={size} />
             ),
           }}
         />
@@ -299,15 +304,17 @@ function App() {
   }
 
   return (
-    <LogContextProvider>
-      <AuthContextProvider>
-        <BookingDetailContextProvider>
-          <NotifcationContextProvider>
-            <RootNavigator />
-          </NotifcationContextProvider>
-        </BookingDetailContextProvider>
-      </AuthContextProvider>
-    </LogContextProvider>
+    <ThemeContextProvider>
+      <LogContextProvider>
+        <AuthContextProvider>
+          <BookingDetailContextProvider>
+            <NotifcationContextProvider>
+              <RootNavigator />
+            </NotifcationContextProvider>
+          </BookingDetailContextProvider>
+        </AuthContextProvider>
+      </LogContextProvider>
+    </ThemeContextProvider>
   );
 }
 

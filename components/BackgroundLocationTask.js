@@ -9,6 +9,7 @@ import LogContext from "../context/LogContext";
 import * as Sentry from "@sentry/react-native";
 import BookingDetailContext from "../context/BookingDetailContext";
 import OnlineStatusIndicator from "./OnlineStatusIndicator";
+import { useTheme } from "../context/ThemeContext";
 
 const LOCATION_TASK_NAME = "background-location-task";
 
@@ -22,6 +23,8 @@ const BackgroundLocationTracker = () => {
   const [permission, setPermission] = useState(false);
 
   // const timeoutRef = useRef(null);
+
+  const { theme } = useTheme();
 
   const authCtx = useContext(AuthContext);
   token = authCtx.tokenRef;
@@ -240,7 +243,7 @@ const BackgroundLocationTracker = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} className={`${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
       <OnlineStatusIndicator />
       {/* {locationStarted ? (
         <TouchableOpacity onPress={stopLocationTracking}>
@@ -295,7 +298,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "white",
+    // backgroundColor: "white",
     width: "100%",
   },
   btnText: {
