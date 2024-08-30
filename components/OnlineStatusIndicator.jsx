@@ -1,11 +1,15 @@
 // OnlineStatusIndicator.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, StyleSheet, Text, Alert } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
+import LogContext from '../context/LogContext';
+import * as Sentry from "@sentry/react-native";
 
 const OnlineStatusIndicator = () => {
   const [isOnline, setIsOnline] = useState(true);
   const [connectivity, setConnectivity] = useState(" ");
+
+  const { addLog } = useContext(LogContext);
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
@@ -15,9 +19,19 @@ const OnlineStatusIndicator = () => {
 			// }
       if(state.isConnected){
         setConnectivity("Online");
+        addLog("Device is Online");
+        Sentry.captureMessage(
+          `Log: Device is Online`,
+          "log"
+        );
       }
       else{
         setConnectivity("Offline");
+        addLog("Device is Offline");
+        Sentry.captureMessage(
+          `Log: Device is Offline`,
+          "log"
+        );
       }
     });
 

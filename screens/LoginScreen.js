@@ -55,7 +55,10 @@ function LoginScreen() {
             authCtx.authenticate(token);
 
             addLog(`User ${username} logged in successfully`);
-            Sentry.captureMessage(`User ${username} logged in successfully`, 'log');
+            Sentry.captureMessage(
+              `Log: User ${username} logged in successfully`,
+              "log"
+            );
 
         }catch(error){
             Alert.alert(

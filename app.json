@@ -30,8 +30,8 @@
         "FOREGROUND_SERVICE_LOCATION"
       ],
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#CD1A21"
       },
       "package": "com.ace.acetaxi",
       "googleServicesFile": "./google-services.json"

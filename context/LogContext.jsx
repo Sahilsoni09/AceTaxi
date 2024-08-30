@@ -10,15 +10,7 @@ export const LogContextProvider = ({ children }) => {
     setLogs((prevLogs) => [...prevLogs, { message, timestamp: new Date() }]);
   };
 
-  // const logInfo = (message) => {
-  //   addLog(message);
 
-  //   Sentry.addBreadcrumb({
-  //     category: 'log',
-  //     message: message,
-  //     level: Sentry.Severity.Info, 
-  //   });
-  // };
 
   const clearLogs = () => {
     setLogs([]);

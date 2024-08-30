@@ -5,6 +5,7 @@ import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import notificationContext from "../context/NotificationContext";
 import BookingDetailContext from "../context/BookingDetailContext";
+import * as Sentry from "@sentry/react-native";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -30,26 +31,25 @@ const Notification = () => {
     registerForPushNotificationsAsync()
       .then((token) => {
         setExpoToken(token);
-        console.log("token", expoToken );
+        console.log("token", expoToken);
       })
       .catch((err) => console.log(err));
 
-    
+    // scheduleHourlyNotification();
+
     // Check for a notification response when the app is launched or resumed
     const checkInitialNotification = async () => {
       const response = await Notifications.getLastNotificationResponseAsync();
       console.log("Response", response);
 
       if (response) {
-        const bookingInfo =
-          response.notification.request.content.data;
+        const bookingInfo = response.notification.request.content.data;
         setBookingDetails(bookingInfo);
 
         const { pickupAddress, destinationAddress } =
           response.notification.request.content.data;
 
         if (pickupAddress === undefined || destinationAddress === undefined) {
-          
           setModalVisible(false);
         } else {
           console.log("modal is set to visible");
@@ -63,6 +63,10 @@ const Notification = () => {
       Notifications.addNotificationReceivedListener((notification) => {
         setNotification(notification);
         console.log("received notification :", notification);
+        Sentry.captureMessage(
+          `NotificationReceived: ${JSON.stringify(notification)}`,
+          "log"
+        );
       });
 
     responseListener.current =
@@ -72,8 +76,7 @@ const Notification = () => {
           response.notification.request.content.data
         );
 
-        const bookingInfo =
-          response.notification.request.content.data;
+        const bookingInfo = response.notification.request.content.data;
 
         const { pickupAddress, destinationAddress } =
           response.notification.request.content.data;
@@ -98,9 +101,9 @@ const Notification = () => {
     };
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     submitDriverId();
-  },[expoToken])
+  }, [expoToken]);
 
   async function registerForPushNotificationsAsync() {
     let token;
@@ -146,6 +149,21 @@ const Notification = () => {
     return token;
   }
 
+  // async function scheduleHourlyNotification() {
+  //   await Notifications.scheduleNotificationAsync({
+  //     content: {
+  //       title: "Reminder",
+  //       body: "You Need To interact with the Ace Taxi app",
+  //       sound: true,
+  //       priority: Notifications.AndroidNotificationPriority.HIGH,
+  //     },
+  //     trigger: {
+  //       seconds: 60, // 1 hour in seconds
+  //       repeats: true,
+  //     },
+  //   });
+  // }
+
   // send driver id & Expo push Token to Backend
 
   function submitDriverId() {
@@ -155,7 +173,7 @@ const Notification = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ token: expoToken, userId:8 }), // Send driverId & expoPushToken to the backend
+      body: JSON.stringify({ token: expoToken, userId: 8 }), // Send driverId & expoPushToken to the backend
     })
       .then((response) => response.json())
       .then((data) => {
@@ -169,6 +187,7 @@ const Notification = () => {
         alert("Failed to send Driver ID. Please try again.");
       });
   }
+
   return <></>;
 };
 

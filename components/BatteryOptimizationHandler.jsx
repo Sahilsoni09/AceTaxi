@@ -32,14 +32,20 @@ const BatteryOptimizationHandler = () => {
             await Battery.isBatteryOptimizationEnabledAsync();
 
           if (isBatteryOptimizationEnabled) {
-            addLog("Battery Optimization enabled Need to disable"); 
-            Sentry.captureMessage("Battery Optimization enabled Need to disable", 'info');
+            addLog("Battery Saver enabled Need to disable"); 
+            Sentry.captureMessage(
+              `Log: Battery Saver enabled Need to disable`,
+              "log"
+            );
 
             if(isPermissionGranted)
             setModalVisible(true); // Show the modal if battery optimization is enabled
           }else{
             addLog("Battery Saver disabled"); 
-            Sentry.captureMessage("Battery Saver disabled", 'info');
+            Sentry.captureMessage(
+              `Log: Battery Saver disabled`,
+              "log"
+            );
           }
         }
       };

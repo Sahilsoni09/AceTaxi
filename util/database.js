@@ -1,4 +1,5 @@
 import * as SQLite from "expo-sqlite/legacy";
+import * as Sentry from "@sentry/react-native";
 
 const database = SQLite.openDatabase("JobsDetails.db");
 
@@ -22,11 +23,18 @@ export function init() {
         [], // Parameters for the query, none in this case
         () => {
           console.log("Table created successfully");
+          Sentry.captureMessage(
+            `Log: Table created successfully`,
+            "log"
+          );
 
           resolve(); // Resolve if table creation is successful
         },
         (_, error) => {
           console.log("initialization of table failed: ", error);
+          Sentry.captureException(
+            new Error(`initialization of table failed: ${error.message}`)
+          );
           reject(error); // Reject the promise if there is an error
         }
       );
@@ -65,10 +73,17 @@ export function insertJobRequestHistory(
         ], // Bind values to the SQL query
         (_, result) => {
           console.log("Insert successful");
+          Sentry.captureMessage(
+            `Log: Insert successful`,
+            "log"
+          );
           resolve(result); // Resolve if the insert is successful
         },
         (_, error) => {
           console.error("Insert failed:", error);
+          Sentry.captureException(
+            new Error(`Insert failed: ${error.message}`)
+          );
           reject(error); // Reject if there's an error
         }
       );
@@ -107,10 +122,17 @@ export function fetchJobRequestHistory() {
           });
 
           console.log("Fetch successful");
+          Sentry.captureMessage(
+            `Log: Fetch successful`,
+            "log"
+          );
           resolve(bookingsWithParsedVias);
         },
         (_, error) => {
           console.error("Fetch error:", error);
+          Sentry.captureException(
+            new Error(`Fetch error: ${error.message}`)
+          );
           reject(error);
         }
       );
