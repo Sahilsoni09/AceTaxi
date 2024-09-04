@@ -18,7 +18,7 @@ export function init() {
           destinationPostCode TEXT NOT NULL,
           vias TEXT,
           price INTEGER NOT NULL,
-          status TEXT NOT NULL
+          status INTEGER NOT NULL
         )`,
         [], // Parameters for the query, none in this case
         () => {
@@ -141,3 +141,51 @@ export function fetchJobRequestHistory() {
 
   return promise;
 }
+
+export function fetchJobRequestByIdAndStatus(bookingId, status) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `SELECT * FROM JobsDetails WHERE bookingId = ? AND status = ?`,
+        [bookingId, status],
+        (_, result) => {
+          const bookings = result.rows._array;
+
+          // Handle parsing for 'vias' with default value
+          const bookingsWithParsedVias = bookings.map((booking) => {
+            console.log("viaFullAddress in DB:", booking.vias);
+            try {
+              return {
+                ...booking,
+                vias: booking.vias ? JSON.parse(booking.vias) : [], // Default to empty array if 'vias' is null or empty
+              };
+            } catch (error) {
+              console.error("Error parsing 'viaFullAddress':", error);
+              return {
+                ...booking,
+                vias: [], // Default to empty array if JSON.parse fails
+              };
+            }
+          });
+
+          console.log("Fetch by ID and status successful");
+          Sentry.captureMessage(
+            `Log: Fetch by ID and status successful`,
+            "log"
+          );
+          resolve(bookingsWithParsedVias);
+        },
+        (_, error) => {
+          console.error("Fetch by ID and status error:", error);
+          Sentry.captureException(
+            new Error(`Fetch by ID and status error: ${error.message}`)
+          );
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+

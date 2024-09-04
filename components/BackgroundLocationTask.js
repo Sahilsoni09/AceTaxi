@@ -56,6 +56,7 @@ const BackgroundLocationTracker = () => {
           `Log: Location Permission granted`,
           "log"
         );
+        
         setPermission(true);
       }
     };

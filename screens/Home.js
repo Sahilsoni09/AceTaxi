@@ -14,14 +14,16 @@ import { ScrollView } from "react-native-gesture-handler";
 import { AuthContext } from "../context/AuthContext";
 import Button from "../components/ui/Button";
 import * as Sentry from "@sentry/react-native";
+import { useTheme } from "../context/ThemeContext";
 
 const { width } = Dimensions.get("window");
 
 const HomeScreen = ({ navigation }) => {
   const authCtx = useContext(AuthContext);
+  const {theme} = useTheme();
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} className = {theme === 'dark'? "bg-[#121212]":"bg-[#f0f0f0]"}>
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
@@ -36,31 +38,31 @@ const HomeScreen = ({ navigation }) => {
           </View>
           {/* <Ionicons name="notifications-outline" size={24} color="white" /> */}
         </View>
-        <View style={styles.switchContainer}>
-          <Text style={{ fontFamily: "Roboto-Bold" }}>
+        <View style={styles.switchContainer} className = {theme === 'dark'? 'bg-[#4A4A4A]': 'bg-white'}>
+          <Text style={{ fontFamily: "Roboto-Bold" }} className ={theme === "dark" ? "text-[#E0E0E0]" : "text-[#333]"}>
             Available/Unavailable
           </Text>
           <Switch />
         </View>
-        <View style={styles.statsContainer}>
+        <View style={styles.statsContainer} >
           <View style={styles.stat}>
-            <Text style={styles.statValue}>3100</Text>
+            <Text style={styles.statValue}>0</Text>
             <Text style={styles.statLabel}>total Earning</Text>
           </View>
           <View style={styles.stat}>
-            <Text style={styles.statValue}>02</Text>
+            <Text style={styles.statValue}>0</Text>
             <Text style={styles.statLabel}>pending</Text>
           </View>
           <View style={styles.stat}>
-            <Text style={styles.statValue}>12</Text>
+            <Text style={styles.statValue}>0</Text>
             <Text style={styles.statLabel}>complete</Text>
           </View>
           <View style={styles.stat}>
-            <Text style={styles.statValue}>04</Text>
+            <Text style={styles.statValue}>0</Text>
             <Text style={styles.statLabel}>cancel Ride</Text>
           </View>
         </View>
-        <Text style={styles.upcomingTitle}>New Upcoming Ride</Text>
+        <Text style={styles.upcomingTitle} className ={theme=== 'dark'?'text-[#E0E0E0]': 'text-black'}>New Upcoming Ride</Text>
         <View style={styles.rideContainer}>
           <Image
             source={{
@@ -83,7 +85,7 @@ const HomeScreen = ({ navigation }) => {
             </Text>
           </View>
         </View>
-        <Text style={styles.activeOfferTitle}>Active Offer</Text>
+        <Text style={styles.activeOfferTitle} className ={theme=== 'dark'?'text-[#E0E0E0]': 'text-black'}>Active Offer</Text>
         <View style={styles.rideContainer}>
           <Image
             source={{
@@ -135,7 +137,7 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f0f0f0",
+    // backgroundColor: "#f0f0f0",
   },
   container: {
     padding: 16,
@@ -166,7 +168,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "white",
+    // backgroundColor: "white",
     padding: 16,
     marginVertical: 8,
     borderRadius: 8,

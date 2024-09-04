@@ -8,8 +8,8 @@ export async function login(username, password) {
         username: username,
         password: password,
     })
-    console.log("Login Response: ", response);
-    console.log(response.data)
+    
+    console.log("Login Response Data", response.data);
 
     const token = response.data.token
     return token;

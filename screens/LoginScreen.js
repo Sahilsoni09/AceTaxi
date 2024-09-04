@@ -4,17 +4,14 @@ import { login } from '../util/auth';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
 import { Alert } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
-import NotifcationContextProvider from '../context/NotifcationContextProvider';
 import notificationContext from '../context/NotificationContext';
 import * as Sentry from "@sentry/react-native";
 import LogContext from '../context/LogContext';
 
 function LoginScreen() {
+  
     const {expoToken} = useContext(notificationContext)
-
     const authCtx = useContext(AuthContext);
-   
-
     const {addLog} = useContext(LogContext);
 
     useEffect (()=>{
@@ -35,7 +32,7 @@ function LoginScreen() {
             console.log(
               "expoToken & driver  ID sent to backend successfully:",
               data
-            );
+            ); 
           })
           .catch((error) => {
             console.error("Error sending Driver ID to backend:", error);

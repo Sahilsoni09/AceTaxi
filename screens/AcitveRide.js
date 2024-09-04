@@ -102,7 +102,7 @@ const ActiveRide = () => {
             <TouchableOpacity
               style={styles.dropdownItem}
               onPress={() => handleStatusUpdate("At Pickup")}
-            >
+            > 
               <Text style={styles.dropdownText}>At Pickup</Text>
             </TouchableOpacity>
             <TouchableOpacity

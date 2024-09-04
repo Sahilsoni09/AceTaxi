@@ -16,7 +16,7 @@ Notifications.setNotificationHandler({
 });
 
 const { width, height } = Dimensions.get("window");
-
+  
 const Notification = () => {
   // const [expoPushToken, setExpoPushToken] = useState('');
   const notificationListener = useRef();
@@ -73,13 +73,13 @@ const Notification = () => {
       Notifications.addNotificationResponseReceivedListener((response) => {
         console.log(
           "NOTIFICATION RESPONSE RECEIVED:",
-          response.notification.request.content.data
+          response.notification.request.content.data.bookinginfo
         );
 
-        const bookingInfo = response.notification.request.content.data;
+        const bookingInfo = response.notification.request.content.data.bookinginfo;
 
         const { pickupAddress, destinationAddress } =
-          response.notification.request.content.data;
+          response.notification.request.content.data.bookinginfo;
 
         if (pickupAddress && destinationAddress) {
           setBookingDetails(bookingInfo);
@@ -92,7 +92,7 @@ const Notification = () => {
           );
         }
       });
-
+ 
     return () => {
       Notifications.removeNotificationSubscription(
         notificationListener.current
@@ -100,6 +100,7 @@ const Notification = () => {
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
+  
 
   useEffect(() => {
     submitDriverId();
@@ -158,7 +159,7 @@ const Notification = () => {
   //       priority: Notifications.AndroidNotificationPriority.HIGH,
   //     },
   //     trigger: {
-  //       seconds: 60, // 1 hour in seconds
+  //       seconds: 10, // 1 hour in seconds
   //       repeats: true,
   //     },
   //   });

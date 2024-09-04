@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -6,12 +6,13 @@ import {
 import { View, Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
-
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 const CustomDrawerContent = (props) => {
   const { theme, toggleTheme } = useTheme();
 
   const authCtx = useContext(AuthContext);
+
 
   const handleLogout = () => {
     authCtx.logout();
@@ -20,18 +21,25 @@ const CustomDrawerContent = (props) => {
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.logoContainer}>
-
-        {/* <TouchableOpacity style={styles.circularButton} onPress={toggleTheme}>
-          <Text style={styles.buttonText} className={`${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-            {theme === "light" ? "🌙" : "☀️"}{" "}
-            
+        <TouchableOpacity
+          style={styles.circularButton}
+          
+          onPress={toggleTheme}
+        >
+          <Text
+            style={styles.buttonText}
+            className={`${theme === "dark" ? "text-white" : "text-black"}`}
+          >
+            {theme === "light" ? (
+              <MaterialIcons name="dark-mode" size={24} color="black" />
+            ) : (
+              <MaterialIcons name="light-mode" size={24} color="white" />
+            )}
           </Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
 
         <Image source={require("../assets/Ace.png")} style={styles.logo} />
       </View>
-
-     
 
       <DrawerItemList {...props} />
 
@@ -58,15 +66,14 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25, // Circular shape
-   
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
+    
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
     top: -20, // Position the button at the top of the drawer
     right: 20, // Align it to the right side
   },
   buttonText: {
-   
     fontSize: 24,
   },
   logoutContainer: {

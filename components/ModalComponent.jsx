@@ -21,7 +21,7 @@ const { width, height } = Dimensions.get("window");
 
 const ModalComponent = () => {
   const { modalVisible, setModalVisible } = useContext(notificationContext);
-  const { BookingDetails, setBookingDetails } =
+  const { BookingDetails, setBookingDetails, setResponse } =
     useContext(BookingDetailContext);
 
   const navigation = useNavigation();
@@ -45,6 +45,7 @@ const ModalComponent = () => {
         alert("Failed to send response. Please try again.");
       });
     setModalVisible(false);
+   
 
     const {
       bookingId,
@@ -97,6 +98,12 @@ const ModalComponent = () => {
       .catch((error) => {
         console.error("Error inserting data:", error);
       });
+
+      setResponse({
+        jobno: bookingId,
+        action: response,
+      });
+
   };
 
   return (
@@ -288,7 +295,7 @@ const ModalComponent = () => {
                 shadowRadius: 2,
                 elevation: 3,
               }}
-              onPress={() => handleJobResponse("✅Accepted")}
+              onPress={() => handleJobResponse(0)}
             >
               <Text
                 style={{
@@ -314,7 +321,7 @@ const ModalComponent = () => {
                 shadowRadius: 2,
                 elevation: 3,
               }}
-              onPress={() => handleJobResponse("❌Declined")}
+              onPress={() => handleJobResponse(1)}
             >
               <Text
                 style={{

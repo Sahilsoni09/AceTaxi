@@ -24,12 +24,12 @@ const BookingHistoryScreen = ({ navigation }) => {
           <Text
             style={[
               styles.statusText,
-              item.status.includes("Accepted")
+              item.status === 0
                 ? styles.statusAccepted
                 : styles.statusDeclined,
             ]}
           >
-            {item.status.includes("Accepted") ? "✅Accepted" : "❌Declined"}
+            {item.status=== 0 ? "✅Accepted" : "❌Declined"}
           </Text>
         </View>
       </View>

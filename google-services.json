@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "30212850639",
-    "project_id": "acetaxi-22e34",
-    "storage_bucket": "acetaxi-22e34.appspot.com"
+    "project_number": "734977083128",
+    "project_id": "acetaxi-31d1b",
+    "storage_bucket": "acetaxi-31d1b.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:30212850639:android:b2cdb1c6ad74d3d9d248ba",
+        "mobilesdk_app_id": "1:734977083128:android:b220a7e168221d8e5a9d0d",
         "android_client_info": {
           "package_name": "com.ace.acetaxi"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAHxJhMkc5CwKX7H75cgVIIAdZ22yEW_JQ"
+          "current_key": "AIzaSyB9yve0Ex5mbe_eD4k5kor7qfr9TAdQG6c"
         }
       ],
       "services": {

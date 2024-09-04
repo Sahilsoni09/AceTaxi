@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "AceTaxis",
-    "slug": "acetaxi",
+    "slug": "ace",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -41,10 +41,10 @@
     },
     "extra": {
       "eas": {
-        "projectId": "4e37a92e-6509-4aa2-ad62-3fffeb456a3a"
+        "projectId": "66e826ed-c444-47c9-aae7-2a8643449dad"
       }
     },
-    "owner": "soni0903",
+    "owner": "sahilsoni009",
     "plugins": [
       [
         "expo-font",

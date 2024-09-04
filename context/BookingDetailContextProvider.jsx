@@ -4,7 +4,7 @@ import BookingDetailContext from "./BookingDetailContext";
 const BookingDetailContextProvider = ({ children }) => {
   const [BookingDetails, setBookingDetails] = useState({});
   const [locationData, setLocationData] = useState(null); // State to store location data
-
+  const [response, setResponse] = useState({}); 
   const [isPermissionGranted, setIsPermissionGranted] = useState(false);
   return (
     <BookingDetailContext.Provider
@@ -15,6 +15,8 @@ const BookingDetailContextProvider = ({ children }) => {
         setLocationData,
         isPermissionGranted,
         setIsPermissionGranted,
+        response,
+        setResponse,
       }}
     >
       {children}

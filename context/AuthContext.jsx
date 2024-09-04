@@ -10,14 +10,15 @@ export const AuthContext = createContext({
 function AuthContextProvider({children}){
     const [authToken,setAuthToken] = useState(); // we get the auth token only when we login successfully
     
+    
     const tokenRef = useRef();
-
 
     function authenticate(token){
         setAuthToken(token);
         tokenRef.current = token; 
         AsyncStorage.setItem('token', token);
     }
+
     function logout(){
         setAuthToken((token)=>{
             console.log("token to null", token);

@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { Alert, Dimensions, StyleSheet, View } from 'react-native';
-
 import FlatButton from '../ui/FlatButton'; 
 import AuthForm from './AuthForm'; 
-
 import { useNavigation } from '@react-navigation/native'; 
 import { Colors } from '../../constants/Styles';
 
@@ -71,9 +69,9 @@ function AuthContent({ isLogin, onAuthenticate }) {
             />
             {/* Button to switch between login and signup modes */}
             <View style={styles.buttons}>
-                <FlatButton onPress={switchAuthModeHandler}>
+                {/* <FlatButton onPress={switchAuthModeHandler}>
                     {isLogin ? 'Create a new user' : 'Log in instead'}
-                </FlatButton>
+                </FlatButton> */}
             </View>
         </View>
     );

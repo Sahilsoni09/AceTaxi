@@ -1,41 +1,43 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import HomeScreen from "./screens/Home";
-import { NavigationContainer} from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   FontAwesome,
   Ionicons,
   MaterialIcons,
   MaterialCommunityIcons,
+  FontAwesome5
 } from "@expo/vector-icons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ModalComponent from "./components/ModalComponent";
 import BookingDetailContextProvider from "./context/BookingDetailContextProvider";
 import NotifcationContextProvider from "./context/NotifcationContextProvider";
-import BookingHistoryScreen from "./screens/BookingHistoryScreen";
 import { useContext, useEffect, useState } from "react";
 import { init } from "./util/database";
 import Notification from "./components/Notification";
-import MapScreen from "./screens/MapScreen";
-import LoginScreen from "./screens/LoginScreen";
-import SignupScreen from "./screens/SignupScreen";
 import AuthContextProvider, { AuthContext } from "./context/AuthContext";
 import * as SplashScreen from "expo-splash-screen";
-import DriverLocation from "./screens/DriverLocation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
 import CustomDrawerContent from "./components/CustomDrawer";
-import EarningsScreen from "./screens/Earnings";
 import IconButton from "./components/ui/IconButton";
-import BackgroundLocation from "./screens/BackgroundLocationScreen";
-import BackgroundLocationTracker from "./components/BackgroundLocationTask";
-import BackgroundLocationScreen from "./screens/BackgroundLocationScreen";
-import LogScreen from "./screens/LogScreen";
 import { LogContextProvider } from "./context/LogContext";
 import * as Sentry from "@sentry/react-native";
 import { ThemeContextProvider, useTheme } from "./context/ThemeContext";
+import {
+  HomeScreen,
+  BookingHistoryScreen,
+  MapScreen,
+  LoginScreen,
+  SignupScreen,
+  DriverLocationScreen,
+  BackgroundLocationScreen,
+  LogScreen,
+  EarningsScreen,
+  ActiveRide,
+} from "./screens";
 
 Sentry.init({
   dsn: "https://d8e473d6b6b9cde2cdb43a744e9d310f@o4507848991375360.ingest.us.sentry.io/4507853493960704",
@@ -104,6 +106,15 @@ function BottomTabNavigator() {
           }}
         />
         <BottomTab.Screen
+          name="Active Ride"
+          component={ActiveRide}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome5 name="car" size={size} color={color} />
+            ),
+          }}
+        />
+        <BottomTab.Screen
           name="Logs"
           component={LogScreen}
           options={{
@@ -145,7 +156,6 @@ function DrawerNavigator() {
             drawerIcon: ({ color, size }) => (
               <Ionicons name="home" color={color} size={size} />
             ),
-
             headerShown: false,
           }}
         />
