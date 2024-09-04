@@ -9,16 +9,18 @@ import {
 import { fetchJobRequestByIdAndStatus } from "../util/database";
 import BookingDetailContext from "../context/BookingDetailContext";
 import NoJobsFound from "../components/NoJobFound";
+import LogContext from "../context/LogContext";
 
 const { width, height } = Dimensions.get("window");
 
 const ActiveRide = () => {
   const { response } = useContext(BookingDetailContext);
+  const {isTestApi} = useContext(LogContext);
   const [booking, setBooking] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState("Update Job Status"); // Initial button label
 
-  console.log("Active Ride Response", response); 
+   
   useEffect(() => {
     const loadActiveBooking = async () => {
       try {
@@ -28,7 +30,7 @@ const ActiveRide = () => {
             0
           );
           setBooking(activeBooking);
-          setSelectedStatus("Update Job Status")  
+          setSelectedStatus("Update Job Status");
         }
       } catch (error) {
         console.error("Error fetching active booking:", error);
@@ -45,13 +47,51 @@ const ActiveRide = () => {
     console.log(`Updating status to: ${status}`);
     // Add logic to update the booking status in your database or state
 
+    const statusMapping = {
+      "At Pickup": 0,
+      "Passenger On Board": 1,
+      "Soon to Clear": 2,
+      "Clear": 3,
+    };
+  
+    // Get the newStatus based on the selected status
+    const newStatus = statusMapping[status];
+    console.log("newStatus: " , newStatus);
+  
+    if (newStatus === undefined) {
+      console.error("Invalid status:", status);
+      return;
+    }
+
+    const BASE = isTestApi
+    ? "https://abacusonline-001-site1.atempurl.com"
+    : "https://api.acetaxisdorset.co.uk";
+  
+  console.log(`Using ${isTestApi ? "test" : "live"} API for notification response`);
+  
+  const url = `${BASE}/api/DriverApp/JobStatusReply?jobno=${response.jobno}&newStatus=${newStatus}`;
+
+    // try {
+    //   const headers = {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${authCtx.tokenRef.current}`, // Use the token from context
+    //   };
+    //   const response = await axios.get(url,{ headers });
+    //   console.log("JobOfferReply send to api:", response);
+    // } catch (error) {
+    //   console.error("Error sending jobOfferReply to API:", error);
+    //   addLog(`Error sending jobOfferReply to API: ${error.message}`);
+    //   Sentry.captureException(
+    //     new Error(`Error sending jobOfferReply to API: ${error.message}`)
+    //   );
+    // }
+
     if (status === "Clear") setBooking([]);
   };
 
   if (!booking || booking.length === 0) {
     return (
-      <View >
-        
+      <View>
         <NoJobsFound message="No active booking found" />
       </View>
     );
@@ -102,7 +142,7 @@ const ActiveRide = () => {
             <TouchableOpacity
               style={styles.dropdownItem}
               onPress={() => handleStatusUpdate("At Pickup")}
-            > 
+            >
               <Text style={styles.dropdownText}>At Pickup</Text>
             </TouchableOpacity>
             <TouchableOpacity

@@ -7,12 +7,13 @@ import { View, Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import LogContext from "../context/LogContext";
 
 const CustomDrawerContent = (props) => {
   const { theme, toggleTheme } = useTheme();
 
   const authCtx = useContext(AuthContext);
-
+  
 
   const handleLogout = () => {
     authCtx.logout();
@@ -41,7 +42,12 @@ const CustomDrawerContent = (props) => {
         <Image source={require("../assets/Ace.png")} style={styles.logo} />
       </View>
 
+     
+
       <DrawerItemList {...props} />
+
+      
+    
 
       <View style={styles.logoutContainer}>
         <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
@@ -76,6 +82,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 24,
   },
+
   logoutContainer: {
     marginTop: "auto", // Pushes the logout button to the bottom
     paddingHorizontal: 20,

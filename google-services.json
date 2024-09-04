@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "734977083128",
-    "project_id": "acetaxi-31d1b",
-    "storage_bucket": "acetaxi-31d1b.appspot.com"
+    "project_number": "677731329974",
+    "project_id": "acetaxis-344c0",
+    "storage_bucket": "acetaxis-344c0.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:734977083128:android:b220a7e168221d8e5a9d0d",
+        "mobilesdk_app_id": "1:677731329974:android:97123b46512d99e9730317",
         "android_client_info": {
-          "package_name": "com.ace.acetaxi"
+          "package_name": "com.ace.acetaxis"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB9yve0Ex5mbe_eD4k5kor7qfr9TAdQG6c"
+          "current_key": "AIzaSyByqWq7lpDABEn5eu-ylg-sfhoFslD9bMk"
         }
       ],
       "services": {

@@ -9,8 +9,5 @@ export async function login(username, password) {
         password: password,
     })
     
-    console.log("Login Response Data", response.data);
-
-    const token = response.data.token
-    return token;
+    return response.data;
 }

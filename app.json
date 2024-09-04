@@ -33,7 +33,7 @@
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#CD1A21"
       },
-      "package": "com.ace.acetaxi",
+      "package": "com.ace.acetaxis",
       "googleServicesFile": "./google-services.json"
     },
     "web": {

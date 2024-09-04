@@ -15,12 +15,15 @@ import { AuthContext } from "../context/AuthContext";
 import Button from "../components/ui/Button";
 import * as Sentry from "@sentry/react-native";
 import { useTheme } from "../context/ThemeContext";
+import LogContext from "../context/LogContext";
 
 const { width } = Dimensions.get("window");
 
 const HomeScreen = ({ navigation }) => {
   const authCtx = useContext(AuthContext);
   const {theme} = useTheme();
+  const {isTestApi, toggleApi} = useContext(LogContext);
+  console.log("isTestApi", isTestApi);
 
   return (
     <SafeAreaView style={styles.safeArea} className = {theme === 'dark'? "bg-[#121212]":"bg-[#f0f0f0]"}>
@@ -44,6 +47,18 @@ const HomeScreen = ({ navigation }) => {
           </Text>
           <Switch />
         </View>
+
+        {/* Add a switch for Test/Live API */}
+        {/* <View style={styles.switchContainer} className={theme === "dark" ? "bg-[#4A4A4A]" : "bg-white"}>
+          <Text style={{ fontFamily: "Roboto-Bold" }} className={theme === "dark" ? "text-[#E0E0E0]" : "text-[#333]"}>
+            {isTestApi ? "Test API" : "Live API"}
+          </Text>
+          <Switch
+            value={!isTestApi}
+            onValueChange={toggleApi}
+          />
+        </View> */}
+
         <View style={styles.statsContainer} >
           <View style={styles.stat}>
             <Text style={styles.statValue}>0</Text>

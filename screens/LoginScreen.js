@@ -9,7 +9,7 @@ import * as Sentry from "@sentry/react-native";
 import LogContext from '../context/LogContext';
 
 function LoginScreen() {
-  
+
     const {expoToken} = useContext(notificationContext)
     const authCtx = useContext(AuthContext);
     const {addLog} = useContext(LogContext);
@@ -48,8 +48,8 @@ function LoginScreen() {
         console.log(username, password);
         setIsAuthenticating(true);
         try{
-            const token = await login(username, password);
-            authCtx.authenticate(token);
+            const authData = await login(username, password);
+            authCtx.authenticate(authData);
 
             addLog(`User ${username} logged in successfully`);
             Sentry.captureMessage(

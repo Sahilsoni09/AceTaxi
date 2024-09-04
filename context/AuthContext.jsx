@@ -8,32 +8,31 @@ export const AuthContext = createContext({
 })
 
 function AuthContextProvider({children}){
-    const [authToken,setAuthToken] = useState(); // we get the auth token only when we login successfully
     
-    
+    const [authData, setAuthData] = useState(null)
     const tokenRef = useRef();
 
-    function authenticate(token){
-        setAuthToken(token);
-        tokenRef.current = token; 
-        AsyncStorage.setItem('token', token);
+    function authenticate(data){
+       
+        setAuthData(data);
+        console.log("authData", data);  
+        tokenRef.current = data.token,
+        AsyncStorage.setItem('authData', JSON.stringify(data));
     }
 
     function logout(){
-        setAuthToken((token)=>{
-            console.log("token to null", token);
-            return null;  
-        });
+        setAuthData(null);
         tokenRef.current = null;  
-        AsyncStorage.removeItem('token');
-        console.log("logout called",authToken);
+        AsyncStorage.removeItem('authData');
+        
     }
     const value= {
-        token: authToken,
-        isAuthenticated: !!authToken,
+        token: authData?.token,
+        isAuthenticated: !!authData?.token,
         authenticate: authenticate,
         logout: logout,
         tokenRef,
+        authData,
         
     }
 

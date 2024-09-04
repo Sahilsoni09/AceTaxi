@@ -268,13 +268,14 @@ function App() {
     });
 
     useEffect(() => {
-      async function loadToken() {
+      async function loadAuthData() {
         try {
-          const storedToken = await AsyncStorage.getItem("token");
-          if (storedToken) {
-            authCtx.authenticate(storedToken);
+          const storedAuthData = await AsyncStorage.getItem('authData');
+          if (storedAuthData) {
+              const parsedAuthData = JSON.parse(storedAuthData);
+              authCtx.authenticate(parsedAuthData); // Authenticate with the full auth data
           }
-        } catch (e) {
+      } catch (e) {
           console.warn(e);
         } finally {
           // Tell the app to hide the splash screen after token check and fonts are loaded
@@ -282,7 +283,7 @@ function App() {
         }
       }
 
-      loadToken();
+      loadAuthData();
     }, []);
 
     useEffect(() => {

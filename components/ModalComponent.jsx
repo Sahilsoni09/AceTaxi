@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import React, { useContext } from "react";
-
+import axios from "axios";
 import BookingDetailContext from "../context/BookingDetailContext";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -16,6 +16,8 @@ import {
 } from "../util/database";
 import BookingHistoryScreen from "../screens/BookingHistoryScreen";
 import notificationContext from "../context/NotificationContext";
+import LogContext from "../context/LogContext";
+import { AuthContext } from "../context/AuthContext";
 
 const { width, height } = Dimensions.get("window");
 
@@ -25,8 +27,37 @@ const ModalComponent = () => {
     useContext(BookingDetailContext);
 
   const navigation = useNavigation();
+  const {isTestApi} = useContext(LogContext);
+  const authCtx = useContext(AuthContext);
+  const { addLog } = useContext(LogContext);
 
-  const handleJobResponse = (response) => {
+
+  const handleJobResponse = async (response) => {
+
+    console.log("Response", response);
+    const BASE = isTestApi
+    ? "https://abacusonline-001-site1.atempurl.com"
+    : "https://api.acetaxisdorset.co.uk";
+  
+  console.log(`Using ${isTestApi ? "test" : "live"} API for notification response`);
+  
+  const url = `${BASE}/api/DriverApp/JobOfferReply?jobno=${BookingDetails.bookingId}&accepted=${response}`;
+
+    // try {
+    //   const headers = {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${authCtx.tokenRef.current}`, // Use the token from context
+    //   };
+    //   const response = await axios.get(url,{ headers });
+    //   console.log("JobOfferReply send to api:", response);
+    // } catch (error) {
+    //   console.error("Error sending jobOfferReply to API:", error);
+    //   addLog(`Error sending jobOfferReply to API: ${error.message}`);
+    //   Sentry.captureException(
+    //     new Error(`Error sending jobOfferReply to API: ${error.message}`)
+    //   );
+    // }
+
     fetch("https://testingpushnotification.onrender.com/dispatch", {
       method: "POST",
       headers: {
@@ -44,6 +75,7 @@ const ModalComponent = () => {
         console.error("Error sending response to backend:", error);
         alert("Failed to send response. Please try again.");
       });
+
     setModalVisible(false);
    
 

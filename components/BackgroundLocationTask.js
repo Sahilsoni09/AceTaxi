@@ -4,7 +4,6 @@ import * as TaskManager from "expo-task-manager";
 import * as Location from "expo-location";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
-
 import LogContext from "../context/LogContext";
 import * as Sentry from "@sentry/react-native";
 import BookingDetailContext from "../context/BookingDetailContext";
@@ -28,6 +27,8 @@ const BackgroundLocationTracker = () => {
 
   const authCtx = useContext(AuthContext);
   token = authCtx.tokenRef;
+  const driverId = authCtx.authData.userId;
+  console.log("driverId", driverId);
 
   const { addLog } = useContext(LogContext);
 
