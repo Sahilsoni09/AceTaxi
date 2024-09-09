@@ -32,8 +32,7 @@ function AuthContextProvider({children}){
         authenticate: authenticate,
         logout: logout,
         tokenRef,
-        authData,
-        
+        authData,  
     }
 
     return <AuthContext.Provider value ={value}>

@@ -10,6 +10,7 @@ import { fetchJobRequestByIdAndStatus } from "../util/database";
 import BookingDetailContext from "../context/BookingDetailContext";
 import NoJobsFound from "../components/NoJobFound";
 import LogContext from "../context/LogContext";
+import { useRoute } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("window");
 
@@ -20,7 +21,9 @@ const ActiveRide = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState("Update Job Status"); // Initial button label
 
-   
+  const route = useRoute();
+  console.log("ROUTE, ", route);
+  
   useEffect(() => {
     const loadActiveBooking = async () => {
       try {

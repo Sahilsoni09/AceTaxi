@@ -1,16 +1,19 @@
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
+import { Provider,useDispatch, useSelector } from "react-redux";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { StatusBar } from "expo-status-bar";
+import Fontisto from '@expo/vector-icons/Fontisto';
 import {
   FontAwesome,
   Ionicons,
   MaterialIcons,
   MaterialCommunityIcons,
-  FontAwesome5
+  FontAwesome5,
+  
 } from "@expo/vector-icons";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ModalComponent from "./components/ModalComponent";
 import BookingDetailContextProvider from "./context/BookingDetailContextProvider";
 import NotifcationContextProvider from "./context/NotifcationContextProvider";
@@ -38,12 +41,12 @@ import {
   EarningsScreen,
   ActiveRide,
 } from "./screens";
+import Welcome from "./screens/Welcome";
+import { authenticate, logout } from "./store/slices/authSlice";
+import store from "./store";
 
 Sentry.init({
   dsn: "https://d8e473d6b6b9cde2cdb43a744e9d310f@o4507848991375360.ingest.us.sentry.io/4507853493960704",
-
-  // uncomment the line below to enable Spotlight (https://spotlightjs.com)
-  // enableSpotlight: __DEV__,
 });
 
 const Drawer = createDrawerNavigator();
@@ -96,11 +99,12 @@ function BottomTabNavigator() {
         }}
       >
         <BottomTab.Screen
-          name="Home"
-          component={HomeScreen}
+          name="Ace Taxis"
+          component={Welcome}
           options={{
             tabBarIcon: ({ color, size }) => (
-              <Ionicons name="home-sharp" color={color} size={size} />
+              // <Ionicons name="home-sharp" color={color} size={size} />
+              <Fontisto name="taxi" size={24} color="black" />
             ),
             headerShown: false,
           }}
@@ -115,6 +119,16 @@ function BottomTabNavigator() {
           }}
         />
         <BottomTab.Screen
+          name="Booking History"
+          component={BookingStackNavigator}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome name="history" color={color} size={size} />
+            ),
+            headerShown: false,
+          }}
+        />
+        {/* <BottomTab.Screen
           name="Logs"
           component={LogScreen}
           options={{
@@ -122,7 +136,7 @@ function BottomTabNavigator() {
               <MaterialCommunityIcons name="console" size={24} color="white" />
             ),
           }}
-        />
+        /> */}
       </BottomTab.Navigator>
     </>
   );
@@ -130,7 +144,12 @@ function BottomTabNavigator() {
 
 function DrawerNavigator() {
   const { theme } = useTheme();
+
+  // const dispatch = useDispatch();
+  // const {isAuthenticated} = useSelector((state)=> state.auth);
+
   const authCtx = useContext(AuthContext);
+
   return (
     <>
       <StatusBar backgroundColor="#CD1A21" style="light" />
@@ -159,7 +178,7 @@ function DrawerNavigator() {
             headerShown: false,
           }}
         />
-        <Drawer.Screen
+        {/* <Drawer.Screen
           name="Booking History"
           component={BookingStackNavigator}
           options={{
@@ -168,7 +187,7 @@ function DrawerNavigator() {
             ),
             headerShown: false,
           }}
-        />
+        /> */}
         {/* <Drawer.Screen
           name="Driver Location"
           component={DriverLocation}
@@ -189,7 +208,7 @@ function DrawerNavigator() {
             ),
           }}
         /> */}
-        <Drawer.Screen
+        {/* <Drawer.Screen
           name="Driver Location"
           component={BackgroundLocationScreen}
           options={{
@@ -205,12 +224,13 @@ function DrawerNavigator() {
                 onPress={() => {
                   console.log("logout triggere");
                   authCtx.logout();
+                  // dispatch(logout());
                 }}
               />
             ),
           }}
-        />
-        <Drawer.Screen
+        /> */}
+        {/* <Drawer.Screen
           name="Earnings"
           component={EarningsScreen}
           options={{
@@ -218,7 +238,7 @@ function DrawerNavigator() {
               <Ionicons name="card" color={color} size={size} />
             ),
           }}
-        />
+        /> */}
       </Drawer.Navigator>
     </>
   );
@@ -261,7 +281,12 @@ function App() {
   }
 
   function RootNavigator() {
+
+    // const dispatch = useDispatch();
+    // const isAuthenticated = useSelector((state)=> state.auth.isAuthenticated);
+
     const authCtx = useContext(AuthContext);
+
     const [loaded, error] = useFonts({
       "Roboto-Regular": require("./assets/Fonts/Roboto/Roboto-Regular.ttf"),
       "Roboto-Bold": require("./assets/Fonts/Roboto/Roboto-Bold.ttf"),
@@ -273,7 +298,8 @@ function App() {
           const storedAuthData = await AsyncStorage.getItem('authData');
           if (storedAuthData) {
               const parsedAuthData = JSON.parse(storedAuthData);
-              authCtx.authenticate(parsedAuthData); // Authenticate with the full auth data
+              authCtx.authenticate(parsedAuthData);
+              // dispatch(authenticate(parsedAuthData));
           }
       } catch (e) {
           console.warn(e);
@@ -315,6 +341,7 @@ function App() {
   }
 
   return (
+    <Provider store = {store}>
     <ThemeContextProvider>
       <LogContextProvider>
         <AuthContextProvider>
@@ -326,6 +353,7 @@ function App() {
         </AuthContextProvider>
       </LogContextProvider>
     </ThemeContextProvider>
+    </Provider>
   );
 }
 

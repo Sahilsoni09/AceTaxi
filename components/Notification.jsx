@@ -6,6 +6,7 @@ import Constants from "expo-constants";
 import notificationContext from "../context/NotificationContext";
 import BookingDetailContext from "../context/BookingDetailContext";
 import * as Sentry from "@sentry/react-native";
+import { AuthContext } from "../context/AuthContext";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -22,10 +23,13 @@ const Notification = () => {
   const notificationListener = useRef();
   const responseListener = useRef();
   const [notification, setNotification] = useState(false);
-
+  
   const { setBookingDetails } = useContext(BookingDetailContext);
   const { expoToken, setExpoToken, setModalVisible } =
     useContext(notificationContext);
+
+    const authCtx = useContext(AuthContext);
+    const driverId = authCtx.authData?.userId;
 
   useEffect(() => {
     registerForPushNotificationsAsync()
@@ -43,11 +47,11 @@ const Notification = () => {
       console.log("Response", response);
 
       if (response) {
-        const bookingInfo = response.notification.request.content.data;
+        const bookingInfo = response.notification.request.content.data.bookingInfo;
         setBookingDetails(bookingInfo);
 
         const { pickupAddress, destinationAddress } =
-          response.notification.request.content.data;
+          response.notification.request.content.data.bookingInfo;
 
         if (pickupAddress === undefined || destinationAddress === undefined) {
           setModalVisible(false);
@@ -174,13 +178,17 @@ const Notification = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ token: expoToken, userId: 8 }), // Send driverId & expoPushToken to the backend
+      body: JSON.stringify({ token: expoToken, userId: driverId }), // Send driverId & expoPushToken to the backend
     })
       .then((response) => response.json())
       .then((data) => {
         console.log(
           "expoToken & driver  ID sent to backend successfully:",
           data
+        );
+        Sentry.captureMessage(
+          `Log: expoToken & driver  ID sent to backend successfully:`,
+          "log"
         );
       })
       .catch((error) => {

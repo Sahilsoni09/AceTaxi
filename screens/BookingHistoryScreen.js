@@ -1,20 +1,33 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList } from "react-native-gesture-handler";
 import { fetchJobRequestHistory } from "../util/database";
 import BookingDetailContext from "../context/BookingDetailContext";
 import { Ionicons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
-import { useRoute } from "@react-navigation/native";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
 
 const BookingHistoryScreen = ({ navigation }) => {
   const [jobHistory, setJobHistory] = useState([]);
 
-  const route = useRoute();
-  console.log("ROUTE, ", route);
+  useFocusEffect(
+    useCallback(() => {
+      const fetchJobRequestHistoryFromDB = async () => {
+        console.log("Fetching job history");
+        try {
+          const history = await fetchJobRequestHistory();
+          console.log("history: ", history);
+          setJobHistory(history); // Update the state with fetched job history
+        } catch (error) {
+          console.error("Error fetching job history from DB:", error);
+        }
+      };
 
-  // Render a single item in the job history list
+      fetchJobRequestHistoryFromDB();
+    }, [])
+  );
+
   const renderItem = ({ item }) => (
     <View style={styles.jobItem}>
       {/* Row for Booking ID and Status */}
@@ -84,20 +97,6 @@ const BookingHistoryScreen = ({ navigation }) => {
     });
   };
 
-  useEffect(() => {
-    fetchJobRequestHistoryFromDB(); // Fetch job history on component mount
-  }, [route.params?.timestamp]); // Empty dependency array to run the effect only once on component mount
-
-  const fetchJobRequestHistoryFromDB = async () => {
-    console.log("Fetching job history");
-    try {
-      const history = await fetchJobRequestHistory();
-      console.log("history: ", history);
-      setJobHistory(history); // Update the state with fetched job history
-    } catch (error) {
-      console.error("Error fetching job history from DB:", error);
-    }
-  };
   console.log("job history:", jobHistory);
 
   return (
@@ -106,9 +105,9 @@ const BookingHistoryScreen = ({ navigation }) => {
       <SafeAreaView style={styles.container}>
         {/* Custom Header */}
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          {/* <TouchableOpacity onPress={() => navigation.openDrawer()}>
             <Ionicons name="menu" size={24} color="white" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <Text style={styles.headerTitle}>Booking History</Text>
         </View>
 
@@ -150,7 +149,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 20,
     fontFamily: 'Roboto-Bold',
-    marginLeft: 20,
+    // marginLeft: 20,
   },
 
   jobItem: {

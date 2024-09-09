@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, AppState } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import * as TaskManager from "expo-task-manager";
 import * as Location from "expo-location";
 import axios from "axios";
@@ -9,6 +9,7 @@ import * as Sentry from "@sentry/react-native";
 import BookingDetailContext from "../context/BookingDetailContext";
 import OnlineStatusIndicator from "./OnlineStatusIndicator";
 import { useTheme } from "../context/ThemeContext";
+import { useSelector } from "react-redux";
 
 const LOCATION_TASK_NAME = "background-location-task";
 
@@ -18,17 +19,21 @@ const BackgroundLocationTracker = () => {
   const [locationData, setLocationData] = useState(null); // State to store location data
   const [lastSentTime, setLastSentTime] = useState(null); // State to store last sent time
   const [apiStatus, setApiStatus] = useState(""); // State to store API status
-  const [appState, setAppState] = useState(AppState.currentState);
   const [permission, setPermission] = useState(false);
 
-  // const timeoutRef = useRef(null);
-
-  const { theme } = useTheme();
-
+  const { authData } = useContext(AuthContext);
+  const fullName = authData?.fullName;
   const authCtx = useContext(AuthContext);
   token = authCtx.tokenRef;
   const driverId = authCtx.authData.userId;
-  console.log("driverId", driverId);
+  
+  //  Use Redux to get authentication data
+  //  const { authData, token: authToken } = useSelector((state) => state.auth);
+  //  const fullName = authData?.fullName;
+  //  token = authToken; // Update token from Redux state
+  //  const driverId = authData?.userId;
+
+  const { theme } = useTheme();
 
   const { addLog } = useContext(LogContext);
 
@@ -46,18 +51,14 @@ const BackgroundLocationTracker = () => {
         console.log("Permission to access location was denied");
         addLog("Permission to access location was denied");
         Sentry.captureException(
-          new Error("Permission to access location was denied", 'error')
+          new Error("Permission to access location was denied", "error")
         );
       } else {
         setIsPermissionGranted(true);
         console.log("Permission to access location granted");
         addLog("Permission to access location granted");
-        
-        Sentry.captureMessage(
-          `Log: Location Permission granted`,
-          "log"
-        );
-        
+        Sentry.captureMessage(`Log: Location Permission granted`, "log");
+
         setPermission(true);
       }
     };
@@ -65,56 +66,12 @@ const BackgroundLocationTracker = () => {
     requestPermissions();
   }, []);
 
-  // useEffect(() => {
-  //   const subscription = AppState.addEventListener("change", handleAppStateChange);
-  //   return () => {
-  //     subscription.remove();
-  //     if (timeoutRef.current) {
-  //       clearTimeout(timeoutRef.current);
-
-  //     }
-  //   };
-  // }, [appState]);
-
-  // const handleAppStateChange = (nextAppState) => {
-  //   if (appState.match(/inactive|background/) && nextAppState === "active") {
-  //     console.log("App has come to the foreground!");
-  //     Sentry.captureMessage(
-  //       `Log: App has come to the foreground!`,
-  //       "log"
-  //     );
-  //     if (timeoutRef.current) {
-        
-  //       console.log("timeout", timeoutRef.current);
-  //     }
-  //   } else if (nextAppState === "background") {
-  //     console.log("App has gone to the background!");
-  //     Sentry.captureMessage(
-  //       `Log: App has gone to the Background!`,
-  //       "log"
-  //     );
-  //     startKilledStateTimer();
-  //   }
-
-  //   setAppState(nextAppState);
-  // };
-
-  // const startKilledStateTimer = () => {
-  //   timeoutRef.current = setTimeout(() => {
-  //     console.log("App might have been killed!");
-     
-  //   }, 10000); // 10 seconds timeout (adjust as needed)
-  // }
-
   useEffect(() => {
     if (!permission) return;
     console.log("Starting location tracking...");
-    // logInfo("Starting location tracking...");
-
     startLocationTracking();
   }, [permission]);
 
-  // Task Manager for background location tracking
   TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
     if (error) {
       console.error("Background location task error:", error);
@@ -132,14 +89,13 @@ const BackgroundLocationTracker = () => {
         const { longitude, latitude, heading, speed } = location.coords;
         const driverSpeed = +speed.toFixed(2);
         const newLocationData = {
-          userId: 20, // Replace with your dynamic userId
+          userId: driverId,
           longtitude: longitude,
           latitude: latitude,
           heading: 0,
           speed: driverSpeed,
         };
 
-        // Update the state with the new location data
         setLocationData(newLocationData);
 
         console.log("Background location:", newLocationData);
@@ -149,13 +105,22 @@ const BackgroundLocationTracker = () => {
           "log"
         );
 
-        // Send the location to your API
-        if (token.current) await sendLocationToApi(newLocationData);
+        if (token.current) {
+          await sendLocationToApi(newLocationData);
+
+          // await sendLocationToApi({
+          //   coords: newLocationData,
+          //   token: token.current,
+          //   setLastSentTime,
+          //   setApiStatus,
+          //   addLog,
+          // });
+        }
+        
       }
     }
   });
 
-  // Function to send location data to the API
   const sendLocationToApi = async (coords) => {
     const BASE = "https://api.acetaxisdorset.co.uk";
     const url = `${BASE}/api/UserProfile/UpdateGPS`;
@@ -163,7 +128,7 @@ const BackgroundLocationTracker = () => {
     try {
       const headers = {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token.current}`, // Use the token from context
+        Authorization: `Bearer ${token.current}`,
       };
 
       const response = await axios.post(url, coords, { headers });
@@ -184,12 +149,8 @@ const BackgroundLocationTracker = () => {
         `Log: Location sent to API at: ${currentTime}`,
         "log"
       );
-
-      // console.log("token", token.current);
     } catch (error) {
-      // Handle network errors or other unexpected errors
       setApiStatus(`Failed: ${error.message}`);
-
       console.error("Error sending location to API:", error);
       addLog(`Error sending location to API: ${error.message}`);
       Sentry.captureException(
@@ -199,6 +160,9 @@ const BackgroundLocationTracker = () => {
   };
 
   const startLocationTracking = async () => {
+    // const isTaskRegistered = await TaskManager.isTaskRegisteredAsync(LOCATION_TASK_NAME);
+ 
+    // if(!isTaskRegistered){
     const { status } = await Location.requestBackgroundPermissionsAsync();
 
     if (status === "granted") {
@@ -208,17 +172,13 @@ const BackgroundLocationTracker = () => {
         distanceInterval: 0,
         pausesUpdatesAutomatically: false,
         foregroundService: {
-          notificationTitle: 'Ace Taxi',
-          notificationBody: 'App is Active',
+          notificationTitle: "Ace Taxi",
+          notificationBody: "App is Active",
         },
       });
       setLocationStarted(true);
       console.log("Background location tracking started");
-      Sentry.captureMessage(
-        `Log: Background location tracking started`,
-        "log"
-      );
-      
+      Sentry.captureMessage(`Log: Background location tracking started`, "log");
     } else {
       console.error("Background location permission not granted");
       addLog("Background location permission not granted");
@@ -226,6 +186,10 @@ const BackgroundLocationTracker = () => {
         new Error("Background location permission not granted")
       );
     }
+    // else{
+    //   console.log("Background location tracking is already running");
+    // }
+
   };
 
   const stopLocationTracking = async () => {
@@ -237,16 +201,26 @@ const BackgroundLocationTracker = () => {
         if (tracking) {
           Location.stopLocationUpdatesAsync(LOCATION_TASK_NAME);
           console.log("Location tracking stopped.");
+          Sentry.captureMessage(`Log: Location tracking stopped`, "log");
         }
       })
       .catch((error) => {
         console.error("Error stopping location tracking:", error);
+        Sentry.captureException(
+          new Error(`Error stopping location tracking: ${error}`)
+        );
       });
   };
 
   return (
-    <View style={styles.container} className={`${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
+    <View
+      style={styles.container}
+      className={`${theme === "dark" ? "bg-black" : "bg-white"}`}
+    >
       <OnlineStatusIndicator />
+
+      <Text style={styles.welcomeText}>Welcome, {fullName}!</Text>
+
       {/* {locationStarted ? (
         <TouchableOpacity onPress={stopLocationTracking}>
           <Text style={styles.btnText}>Stop Tracking</Text>
@@ -291,7 +265,7 @@ const BackgroundLocationTracker = () => {
           API Status: {apiStatus}
         </Text>
       )}
-    </View> 
+    </View>
   );
 };
 
@@ -320,17 +294,25 @@ const styles = StyleSheet.create({
   },
   locationText: {
     fontSize: 16,
+    fontFamily: "Roboto-Regular",
     color: "#333",
     marginBottom: 5,
   },
   sentTimeText: {
     fontSize: 16,
+    fontFamily: "Roboto-Regular",
     color: "blue",
     marginTop: 20,
   },
   apiStatusText: {
     fontSize: 16,
+    fontFamily: "Roboto-Regular",
     marginTop: 10,
+  },
+  welcomeText: {
+    fontSize: 24,
+    fontFamily: "Roboto-Bold",
+    color: "#333",
   },
 });
 

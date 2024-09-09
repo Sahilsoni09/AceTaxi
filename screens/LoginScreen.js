@@ -7,14 +7,18 @@ import { AuthContext } from '../context/AuthContext';
 import notificationContext from '../context/NotificationContext';
 import * as Sentry from "@sentry/react-native";
 import LogContext from '../context/LogContext';
+import { useDispatch } from 'react-redux';
 
 function LoginScreen() {
 
     const {expoToken} = useContext(notificationContext)
     const authCtx = useContext(AuthContext);
+    // const dispatch = useDispatch();
+    const driverId = authCtx.authData?.userId;
     const {addLog} = useContext(LogContext);
 
     useEffect (()=>{
+        if(driverId)
         submitDriverId();
       },[expoToken])
 
@@ -25,7 +29,7 @@ function LoginScreen() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ token: expoToken, userId:8 }), // Send driverId & expoPushToken to the backend
+          body: JSON.stringify({ token: expoToken, userId: driverId }), // Send driverId & expoPushToken to the backend
         })
           .then((response) => response.json())
           .then((data) => {
@@ -49,7 +53,8 @@ function LoginScreen() {
         setIsAuthenticating(true);
         try{
             const authData = await login(username, password);
-            authCtx.authenticate(authData);
+            authCtx.authenticate(authData);     
+            // dispatch(authenticate(authData));
 
             addLog(`User ${username} logged in successfully`);
             Sentry.captureMessage(

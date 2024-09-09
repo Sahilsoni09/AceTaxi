@@ -36,3 +36,7 @@ yarn-error.*
 
 
 .env.local
+
+google-services.json
+
+acetaxis-344c0-firebase-adminsdk-82ilw-3303604565.json

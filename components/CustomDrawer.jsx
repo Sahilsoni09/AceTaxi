@@ -8,6 +8,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import LogContext from "../context/LogContext";
+import * as Sentry from "@sentry/react-native";
 
 const CustomDrawerContent = (props) => {
   const { theme, toggleTheme } = useTheme();
@@ -17,11 +18,16 @@ const CustomDrawerContent = (props) => {
 
   const handleLogout = () => {
     authCtx.logout();
+    Sentry.captureMessage(
+      `Log: User ${authCtx.authData?.fullName} logout successfully`,
+      "log"
+    );
+
   };
 
   return (
     <DrawerContentScrollView {...props}>
-      <View style={styles.logoContainer}>
+      {/* <View style={styles.logoContainer}>
         <TouchableOpacity
           style={styles.circularButton}
           
@@ -40,11 +46,11 @@ const CustomDrawerContent = (props) => {
         </TouchableOpacity>
 
         <Image source={require("../assets/Ace.png")} style={styles.logo} />
-      </View>
+      </View> */}
 
      
 
-      <DrawerItemList {...props} />
+      {/* <DrawerItemList {...props} /> */}
 
       
     

@@ -22,6 +22,8 @@ import { AuthContext } from "../context/AuthContext";
 const { width, height } = Dimensions.get("window");
 
 const ModalComponent = () => {
+   console.log("modal component called ");
+
   const { modalVisible, setModalVisible } = useContext(notificationContext);
   const { BookingDetails, setBookingDetails, setResponse } =
     useContext(BookingDetailContext);
@@ -122,10 +124,16 @@ const ModalComponent = () => {
     )
       .then(() => {
         console.log("Data inserted successfully");
-        navigation.navigate("Booking History", {
-          screen: "BookingHistory",
-          params: { timestamp: Date.now() },
-        });
+
+        if(response === 0){
+          navigation.navigate("Active Ride", {
+            screen: "Active Ride",
+            params: { timestamp: Date.now() },
+          });
+        }else{
+          console.log("driver decline the new job");
+        }
+        
       })
       .catch((error) => {
         console.error("Error inserting data:", error);
@@ -198,7 +206,7 @@ const ModalComponent = () => {
                 color: "#000",
               }}
             >
-              {BookingDetails.passengerName}
+              {BookingDetails?.passengerName}
             </Text>
           </View>
 
@@ -219,7 +227,7 @@ const ModalComponent = () => {
                 color: "#000",
               }}
             >
-              {BookingDetails.pickupAddress}
+              {BookingDetails?.pickupAddress}
             </Text>
           </View>
 
@@ -240,7 +248,7 @@ const ModalComponent = () => {
                 color: "#000",
               }}
             >
-              {BookingDetails.destinationAddress}
+              {BookingDetails?.destinationAddress}
             </Text>
           </View>
 
@@ -261,7 +269,7 @@ const ModalComponent = () => {
                 color: "#000",
               }}
             >
-              {new Date(BookingDetails.pickupDateTime).toLocaleString()}
+              {new Date(BookingDetails?.pickupDateTime).toLocaleString()}
             </Text>
           </View>
 
@@ -282,7 +290,7 @@ const ModalComponent = () => {
                 color: "#000",
               }}
             >
-              £{BookingDetails.price}
+              £{BookingDetails?.price}
             </Text>
           </View>
 
@@ -303,7 +311,7 @@ const ModalComponent = () => {
                 color: "#000",
               }}
             >
-              {BookingDetails.phoneNumber}
+              {BookingDetails?.phoneNumber}
             </Text>
           </View>
 
